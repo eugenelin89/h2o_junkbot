@@ -30,7 +30,7 @@ def save_conversation(timestamp, sender_id, sender_msg, response_msg):
 def process_user_response(sender_id, intent, parameters):
     print('process_user_response(%s, %s, %s)'%(sender_id, intent, '{parameters}'))
     # test
-    if intents[intent]:
+    if intent and intents[intent]:
         intents[intent](sender_id, parameters)
     else:
         intents['Fallback'](sender_id, parameters)
