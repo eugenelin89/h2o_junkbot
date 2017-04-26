@@ -23,38 +23,37 @@ def test():
     return "Good Test!"
 
 
-@app.route("/fb_webhook/<bot_id>", methods=['GET'])
-def handshake(bot_id):
-    debug('Hello FooBar!')
-    debug(request.data)
-    token = request.args.get('hub.verify_token')
-    challenge = request.args.get('hub.challenge')
-    if token == os.environ['VERIFY_TOKEN'] and challenge != None: # need fix
-        return challenge
-    else:
-        abort(401)
+#######################
+# Inbound from API.AI #
+#######################
 
-import requests
-_post_msg_url = 'https://graph.facebook.com/v2.6/me/messages?access_token='+os.environ['FBOT_ACCESS_TOKEN']
-test = 0
-def testfunc(data):
-    global test
-    test = test + 1
-    sender_id = data['entry'][0]['messaging'][0]['sender']['id']
-    resp_data = {
-        "recipient" : {"id":sender_id},
-        "message" : {"text":"TEST -> "+str(test)}        
-    }
-    post_result = requests.post(_post_msg_url, json=resp_data)
-    return post_result
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    req = request.get_json(silent=True, force=True)
+    print("Request:")
+    print(json.dumps(req, indent=4))
+    res = processRequest(req)
+    res = json.dumps(res, indent=4)
+    # print(res)
+    r = make_response(res)
+    r.headers['Content-Type'] = 'application/json'
+    return r
 
-@app.route("/fb_webhook/<bot_id>", methods=['POST'])
-def process_message(bot_id):
-    # received message from user
-    debug('Process message...\n'+request.data)
-    data = request.json # type dict, whereas request.data is type str
-    tasks.process.delay(data)
-    return "ok"
+
+def processRequest(req):
+    # Get incoming message
+    print('processing request...')
+    sender_id = req.get("originalRequest").get("data").get("sender").get("id")
+    sender_msg = req.get("originalRequest").get("data").get("message").get("text")
+    response_msg = req.get("result").get("fulfillment").get("speech")
+    timestamp = req.get("timestamp")
+    action = req.get("result").get("action")
+    intent = req.get("result").get("metadata").get("intentName")
+    parameters = req.get("result").get("parameters")
+    #tasks.save_conversation.delay(timestamp, sender_id, sender_msg, response_msg)
+    #tasks.process_user_response.delay(sender_id, intent, parameters)
+    return
+
 
 
 ###########
