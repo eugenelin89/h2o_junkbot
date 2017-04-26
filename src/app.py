@@ -34,7 +34,7 @@ def webhook():
     print(json.dumps(req, indent=4))
     res = processRequest(req)
     res = json.dumps(res, indent=4)
-    print(res)
+    #print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     return r
@@ -42,7 +42,7 @@ def webhook():
 
 def processRequest(req):
     # Get incoming message
-    print('processing request...')
+    print('processRequest...')
     sender_id = req.get("originalRequest").get("data").get("sender").get("id")
     sender_msg = req.get("originalRequest").get("data").get("message").get("text")
     response_msg = req.get("result").get("fulfillment").get("speech")
@@ -51,7 +51,7 @@ def processRequest(req):
     intent = req.get("result").get("metadata").get("intentName")
     parameters = req.get("result").get("parameters")
     #tasks.save_conversation.delay(timestamp, sender_id, sender_msg, response_msg)
-    #tasks.process_user_response.delay(sender_id, intent, parameters)
+    tasks.process_user_response.delay(sender_id, intent, parameters)
     return
 
 
