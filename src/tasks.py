@@ -1,6 +1,6 @@
 # https://www.cloudamqp.com/docs/celery.html
-import celery, os, requests, json, tasks #, intents, fb
-#from intents import *
+import celery, os, requests, json, tasks, fb
+from intents import *
 
 
 #_post_msg_url = 'https://graph.facebook.com/v2.6/me/messages?access_token='+os.environ['FBOT_ACCESS_TOKEN']
@@ -32,7 +32,7 @@ def process_user_response(sender_id, intent, parameters):
     if intents[intent]:
         intents[intent](sender_id, parameters)
     else:
-        intents['Fallback'](sender_id_parameters)
+        intents['Fallback'](sender_id, parameters)
     return
 
 
