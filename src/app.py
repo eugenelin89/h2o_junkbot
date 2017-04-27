@@ -50,7 +50,7 @@ def processRequest(req):
     action = req.get("result").get("action")
     intent = req.get("result").get("metadata").get("intentName")
     parameters = req.get("result").get("parameters")
-    #tasks.save_conversation.delay(timestamp, sender_id, sender_msg, response_msg)
+    tasks.save_conversation.delay(timestamp, sender_id, sender_msg, response_msg)
     tasks.process_user_response.delay(sender_id, intent, parameters)
     return
 
