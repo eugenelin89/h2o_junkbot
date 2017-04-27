@@ -2,7 +2,7 @@ from actions import *
 
 
 intents = {
-'Default Fallback Intent':intention_func1,
-'Fallback':intention_func1,
-'Hi':begin_dialog
+'Default Fallback Intent':fallback_action,
+'Fallback':fallback_action,
+'Hi':begin_action
 }
