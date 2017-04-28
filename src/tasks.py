@@ -1,5 +1,5 @@
 # https://www.cloudamqp.com/docs/celery.html
-import celery, os, requests, json, tasks, fb
+import celery, os, requests, json, tasks, fb, states
 from intents import *
 
 
@@ -30,6 +30,8 @@ def save_conversation(timestamp, sender_id, sender_msg, response_msg):
 def process_user_response(sender_id, intent, parameters):
     print('process_user_response(%s, %s, %s)'%(sender_id, intent, '{parameters}'))
     # test
+    state = states.get_state(sender_id)
+
     if intent and intent in intents.keys():
         intents[intent](sender_id, parameters)
     else:

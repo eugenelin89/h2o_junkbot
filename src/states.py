@@ -1,18 +1,33 @@
-import requests, json
+import requests, json, actions
 from abc import ABCMeta, abstractmethod
 
-class ABCState(object):
+class State(object):
     __metaclass__ = ABCMeta
 
-
-class INIT(ABCState):
     def __init__(self):
-        state = "init"
+        pass
 
-class WAIT_FOR_ZIP(ABCState):
-    pass
+    @abstractmethod
+    def execute_intent(sender_id, intent, parameters):
+        pass
 
 
+class INIT(State):
+    def execute_intent(sender_id, intent, parameters):
+        # Say Hello
+
+        # Prompt user
+
+        # Update State
+        pass
+
+class WAIT_FOR_ZIP(State):
+    def execute_intent(sender_id, intent, parameters):
+        pass
+
+#################################
+# Get Instance of a STATE object
+#################################
 def get_state(sender_id):
     url = os.environ['GET_STATE_URL']
     cur_state = requests.get(url, {'sender_id':sender_id}).json()
