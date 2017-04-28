@@ -1,4 +1,4 @@
-import requests, json, actions
+import requests, json, actions, os
 from abc import ABCMeta, abstractmethod
 
 class State(object):
