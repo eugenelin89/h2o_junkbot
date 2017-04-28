@@ -9,7 +9,7 @@ def send_message(sender_id, message, quick_reply = None):
     }
     if quick_reply != None:
         resp_data["message"]["quick_replies"] = quick_reply
-    res = requests.post(post_msg_url,params = {'access_token',os.environ['FB_ACCESS_TOKEN']} json=resp_data)
+    res = requests.post(post_msg_url,params = {'access_token',os.environ['FB_ACCESS_TOKEN']}, json=resp_data)
     return res
 
 def get_fb_profile(sender_id):
