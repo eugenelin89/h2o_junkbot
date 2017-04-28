@@ -1,6 +1,12 @@
 import fb, requests, os, json
 # output action of intentions
 
+def greet_action(sender_id, parameters):
+    print 'greet_action'
+    # Get user info
+
+    # Greet user
+
 def fallback_action(sender_id, parameters):
     print 'intention_func1'
     data = {}
@@ -14,9 +20,8 @@ def fallback_action(sender_id, parameters):
 
 def begin_action(sender_id, parameters):
     print('begin_dialog(%s, %s, %s)' % (sender_id , json.dumps(parameters, indent=4)))
-    # get profile, if no profile, set profile
     # check which step ware are currently on, as well as timestamp
-
+    # Instantiate current state, and let current state do the magic.
     return {}
 
 def zip_submit(sender_id, parameters):
