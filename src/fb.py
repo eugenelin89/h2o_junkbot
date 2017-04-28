@@ -1,7 +1,6 @@
 import os, requests
 
 def send_message(sender_id, message, quick_reply = None):
-    #post_msg_url = 'https://graph.facebook.com/v2.6/me/messages?access_token='+os.environ['FB_ACCESS_TOKEN']
     post_msg_url = os.environ['FB_GRAPHAPI_URL']+'me/messages'
     resp_data = {
         "recipient":{"id":sender_id},
