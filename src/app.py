@@ -23,6 +23,26 @@ def test():
     return "Good Test!"
 
 
+#########################
+# Inbound from Facebook #
+#########################
+@app.route("/fb_webhook/<bot_id>", methods=['GET'])
+def handshake(bot_id):
+    token = request.args.get('hub.verify_token')
+    challenge = request.args.get('hub.challenge')
+    if token == os.environ['VERIFY_TOKEN'] and challenge != None: # need fix
+        return challenge
+    else:
+        abort(401)
+
+@app.route("/fb_webhook/<bot_id>", methods=['POST'])
+def process_message(bot_id):
+    # received message from user
+    debug('Process message...\n'+request.data)
+    data = request.json # type dict, whereas request.data is type str
+    tasks.fb_process.delay(data)
+    return "ok"
+
 #######################
 # Inbound from API.AI #
 #######################

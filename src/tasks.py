@@ -17,6 +17,21 @@ app.conf.update(
 
 
 @app.task
+def fb_process(data):
+    if 'message' in data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
+        sender_id = data['entry'][0]['messaging'][0]['sender']['id']
+        message = data['entry'][0]['messaging'][0]['message']['text']
+        # sending messages will be moved out of this module.
+        resp_data = {
+            "recipient" : {"id":sender_id},
+            "message" : {"text":str(message)}
+        }
+        print 'POST RESPONSE BACK TO: '+ _post_msg_url
+        post_result = requests.post(_post_msg_url, json=resp_data)
+        print post_result
+    return
+
+@app.task
 def save_conversation(timestamp, sender_id, sender_msg, response_msg):
     print 'SAVE CONVERSATION...'
     # 1. store message to db by POST to baymax_firebase
