@@ -1,5 +1,5 @@
 # https://www.cloudamqp.com/docs/celery.html
-import celery, os, requests, json, tasks, fb, states
+import celery, os, requests, json, tasks, fb, states, apiai
 from intents import *
 
 
@@ -21,6 +21,8 @@ def fb_process(data):
     if 'message' in data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
         sender_id = data['entry'][0]['messaging'][0]['sender']['id']
         message = data['entry'][0]['messaging'][0]['message']['text']
+        nlp = apiai.query(sender_id, message)
+        print json.dumps(nlp, indent = 4)
         return fb.send_message(sender_id, str(message))
     return
 
