@@ -13,6 +13,6 @@ def query(sender_id, content):
         "lang":"en",
         "sessionId":sender_id
     }
-    params = {v:os.environ['APIAI_VERSION']}
+    params = {'v':os.environ['APIAI_VERSION']}
     res = requests.post(os.environ['APIAI_URL'], params = params, json=data, headers=headers).json()
     return res
