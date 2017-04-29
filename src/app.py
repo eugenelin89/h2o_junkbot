@@ -28,20 +28,16 @@ def test():
 #########################
 @app.route("/fb_webhook/<bot_id>", methods=['GET'])
 def handshake(bot_id):
-    debug("verify...")
     token = request.args.get('hub.verify_token')
     challenge = request.args.get('hub.challenge')
     if token == os.environ['VERIFY_TOKEN'] and challenge != None: # need fix
-        debug("return challenge")
         return challenge
     else:
-        debug("abort")
         abort(401)
 
 @app.route("/fb_webhook/<bot_id>", methods=['POST'])
 def process_message(bot_id):
     # received message from user
-    debug('Process message...\n'+request.data)
     data = request.json # type dict, whereas request.data is type str
     tasks.fb_process.delay(data)
     return "ok"
@@ -55,7 +51,7 @@ def webhook():
     req = request.get_json(silent=True, force=True)
     print("Request:")
     print(json.dumps(req, indent=4))
-    res = processRequest(req)
+    processRequest(req)
     res = json.dumps(res, indent=4)
     #print(res)
     r = make_response(res)
@@ -82,10 +78,6 @@ def processRequest(req):
 ###########
 # Helpers #
 ###########
-
-
-def debug(message):
-    print(message, file=sys.stderr)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
