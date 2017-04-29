@@ -22,13 +22,14 @@ def fb_process(data):
         sender_id = data['entry'][0]['messaging'][0]['sender']['id']
         message = data['entry'][0]['messaging'][0]['message']['text']
         # sending messages will be moved out of this module.
-        resp_data = {
-            "recipient" : {"id":sender_id},
-            "message" : {"text":str(message)}
-        }
-        print 'POST RESPONSE BACK TO: '+ _post_msg_url
-        post_result = requests.post(_post_msg_url, json=resp_data)
-        print post_result
+        #resp_data = {
+        #    "recipient" : {"id":sender_id},
+        #    "message" : {"text":str(message)}
+        #}
+        #print 'POST RESPONSE BACK TO: '+ _post_msg_url
+        #post_result = requests.post(_post_msg_url, json=resp_data)
+        #print post_result
+        return fb.send_message(sender_id, str(message))
     return
 
 @app.task
