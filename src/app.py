@@ -28,11 +28,14 @@ def test():
 #########################
 @app.route("/fb_webhook/<bot_id>", methods=['GET'])
 def handshake(bot_id):
+    debug("verify...")
     token = request.args.get('hub.verify_token')
     challenge = request.args.get('hub.challenge')
     if token == os.environ['VERIFY_TOKEN'] and challenge != None: # need fix
+        debug("return challenge")
         return challenge
     else:
+        debug("abort")
         abort(401)
 
 @app.route("/fb_webhook/<bot_id>", methods=['POST'])
