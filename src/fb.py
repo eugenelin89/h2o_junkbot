@@ -1,4 +1,4 @@
-import os, requests
+import os, requests, json
 
 def send_message(sender_id, message, quick_reply = None):
     post_msg_url = os.environ['FB_GRAPHAPI_URL']+'me/messages'
