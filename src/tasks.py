@@ -22,8 +22,14 @@ def fb_process(data):
     if 'message' in data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
         sender_id = data['entry'][0]['messaging'][0]['sender']['id']
         message = data['entry'][0]['messaging'][0]['message']['text']
-        nlp = apiai.query(sender_id, message)
-        print 'API.AI Query Result: %s' % (json.dumps(nlp, indent = 4))
+        timestamp = data['entry'][0]['time']
+        apiai_query = apiai.query(sender_id, message)
+        apiai_action = apiai_query['result']['action']
+        print 'action: '+apiai_action
+        #apiai_intent =
+        #apiai_parameters =
+        #apiai_fulfillment_msg =
+        print 'API.AI Query Result: %s' % (json.dumps(apiai_query, indent = 4))
         return fb.send_message(sender_id, str(message))
     return
 
