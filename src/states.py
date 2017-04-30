@@ -1,5 +1,6 @@
 import requests, json, actions, os, fb
 from abc import ABCMeta, abstractmethod
+from messages import *
 
 class State(object):
     __metaclass__ = ABCMeta
@@ -28,6 +29,7 @@ class INIT(State):
         if action.strip().find('smalltalk') == 0:
             self.message_sender([nlp_data.get("result").get("fulfillment").get("speech")])
         # 2. Say Hello
+        self.message_sender([HELLO_MESSAGE_1, HELLO_MESSAGE_2])
         # 3. Prompt for ZIP
         return
 
