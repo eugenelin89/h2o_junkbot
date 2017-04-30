@@ -17,6 +17,7 @@ class State(object):
 
     @classmethod
     def set_next_state(cls, next_state):
+        print 'Setting next state to: '+ next_state
         url = os.environ['GET_STATE_URL']
         payload = {'state':next_state}
         return requests.post(url, json = payload, param = {'sender_id':sender_id}).json()
