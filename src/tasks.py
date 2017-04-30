@@ -18,6 +18,7 @@ app.conf.update(
 
 @app.task
 def fb_process(data):
+    print 'fb_process( %s )' % (json.dumps(data, indent=4))
     if 'message' in data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
         sender_id = data['entry'][0]['messaging'][0]['sender']['id']
         message = data['entry'][0]['messaging'][0]['message']['text']
