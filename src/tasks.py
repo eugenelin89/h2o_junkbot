@@ -20,16 +20,18 @@ app.conf.update(
 def fb_process(data):
     print 'fb_process( %s )' % (json.dumps(data, indent=4))
     if 'message' in data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
-        sender_id = data['entry'][0]['messaging'][0]['sender']['id']
-        message = data['entry'][0]['messaging'][0]['message']['text']
-        timestamp = data['entry'][0]['time']
-        apiai_query = apiai.query(sender_id, message)
+        fb_sender_id = data['entry'][0]['messaging'][0]['sender']['id']
+        fb_message = data['entry'][0]['messaging'][0]['message']['text']
+        fb_timestamp = data['entry'][0]['time']
+
+        apiai_query = apiai.query(fb_sender_id, fb_message)
         apiai_action = apiai_query.get('result').get('action')
         apiai_intent = apiai_query.get('result').get('metadata').get('intentName')
-        #apiai_parameters =
-        #apiai_fulfillment_msg =
+        apiai_parameters = apiai_query.get('result').get('parameters')
+        apiai_fulfillment_msg = apiai_query.get("result").get("fulfillment").get("speech")
         print 'API.AI Query Result: %s' % (json.dumps(apiai_query, indent = 4))
-        return fb.send_message(sender_id, str(message))
+        
+        return fb.send_message(fb_sender_id, str(fb_message))
     return
 
 @app.task
