@@ -19,7 +19,7 @@ class State(object):
         print 'Setting next state to: '+ next_state
         url = os.environ['GET_STATE_URL']
         payload = {'state':next_state}
-        return requests.post(url, json = payload, param = {'sender_id':self.sender_id}).json()
+        return requests.post(url, json = payload, params = {'sender_id':self.sender_id}).json()
 
     @abstractmethod
     def responds_to_sender(self, sender_id, message, nlp_data):
