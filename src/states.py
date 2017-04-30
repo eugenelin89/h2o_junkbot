@@ -38,7 +38,8 @@ class INIT(State):
         # 3. Prompt for ZIP
         self.message_sender([PROMPT_ZIP_MESSAGE])
         # 4. Change state to WAIT_FOR_ZIP
-        self.set_next_state('WAIT_FOR_ZIP')
+        result = self.set_next_state('WAIT_FOR_ZIP')
+        print result
         return
 
 class WAIT_FOR_ZIP(State):
