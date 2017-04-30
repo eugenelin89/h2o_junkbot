@@ -19,7 +19,8 @@ class State(object):
         print 'Setting next state to: '+ next_state
         url = os.environ['GET_STATE_URL']
         payload = {'state':next_state}
-        return requests.post(url, json = payload, params = {'sender_id':self.sender_id}).json()
+        requests.post(url, json = payload, params = {'sender_id':self.sender_id}).json()
+        return
 
     @abstractmethod
     def responds_to_sender(self, sender_id, message, nlp_data):
@@ -39,7 +40,6 @@ class INIT(State):
         self.message_sender([PROMPT_ZIP_MESSAGE])
         # 4. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
-        print result
         return
 
 class WAIT_FOR_ZIP(State):
