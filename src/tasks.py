@@ -23,7 +23,7 @@ def fb_process(data):
         sender_id = data['entry'][0]['messaging'][0]['sender']['id']
         message = data['entry'][0]['messaging'][0]['message']['text']
         nlp = apiai.query(sender_id, message)
-        print json.dumps(nlp, indent = 4)
+        print 'API.AI Query Result: %s' % (json.dumps(nlp, indent = 4))
         return fb.send_message(sender_id, str(message))
     return
 
