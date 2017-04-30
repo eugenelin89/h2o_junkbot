@@ -15,6 +15,11 @@ class State(object):
             fb.send_message(self.sender_id, message)
         return
 
+    @classmethod
+    def set_next_state(cls, next_state):
+        url = os.environ['GET_STATE_URL']
+        payload = {'state':next_state}
+        return requests.post(url, json = payload, param = {'sender_id':sender_id}).json()
 
     @abstractmethod
     def responds_to_sender(self, sender_id, message, nlp_data):
@@ -32,6 +37,8 @@ class INIT(State):
         self.message_sender([HELLO_MESSAGE_1, HELLO_MESSAGE_2])
         # 3. Prompt for ZIP
         self.message_sender([PROMPT_ZIP_MESSAGE])
+        # 4. Change state to WAIT_FOR_ZIP
+        self.set_next_state('WAIT_FOR_ZIP')
         return
 
 class WAIT_FOR_ZIP(State):
