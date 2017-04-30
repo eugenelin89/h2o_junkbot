@@ -31,7 +31,7 @@ class INIT(State):
         # 2. Say Hello
         self.message_sender([HELLO_MESSAGE_1, HELLO_MESSAGE_2])
         # 3. Prompt for ZIP
-        self.message_sender(PROMPT_ZIP_MESSAGE)
+        self.message_sender([PROMPT_ZIP_MESSAGE])
         return
 
 class WAIT_FOR_ZIP(State):
