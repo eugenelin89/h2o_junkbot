@@ -8,16 +8,16 @@ class State(object):
         self.sender_id = sender_id
         pass
 
-    def message_user(response_message):
+    def message_user(self, response_message):
         pass
 
     @abstractmethod
-    def responds_to_sender(sender_id, message, nlp_data):
+    def responds_to_sender(self, sender_id, message, nlp_data):
         pass
 
 
 class INIT(State):
-    def responds_to_sender(sender_message, nlp_data):
+    def responds_to_sender(self, sender_message, nlp_data):
         # 1. If smalltalk avail, reply with smalltalk
         # 2. Say Hello
         # 3.
