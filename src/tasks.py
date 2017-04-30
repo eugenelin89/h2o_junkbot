@@ -30,7 +30,7 @@ def fb_process(fb_data):
         # apiai_parameters = apiai_data.get('result').get('parameters')
         # apiai_fulfillment_msg = apiai_data.get("result").get("fulfillment").get("speech")
         print 'API.AI Query Result: %s' % (json.dumps(apiai_data, indent = 4))
-        state = state.get_state(fb_sender_id)
+        state = states.get_state(fb_sender_id)
         fb.send_message(fb_sender_id, str(fb_message))
     return
 
