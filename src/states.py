@@ -1,4 +1,4 @@
-import requests, json, actions, os
+import requests, json, actions, os, fb
 from abc import ABCMeta, abstractmethod
 
 class State(object):
@@ -9,7 +9,8 @@ class State(object):
         pass
 
     def message_sender(self, response_message):
-        pass
+        return fb.send_message(self.sender_id, response_message)
+
 
     @abstractmethod
     def responds_to_sender(self, sender_id, message, nlp_data):
@@ -22,7 +23,8 @@ class INIT(State):
         # 1. If smalltalk avail, reply with smalltalk
         action = nlp_data.get('result').get('action')
         if action.strip().find('smalltalk') == 0:
-            print 'SMALL TALK'
+            #smalltalk_resp = nlp_data.get("result").get("fulfillment").get("speech")
+            self.message_sender(nlp_data.get("result").get("fulfillment").get("speech"))
         # 2. Say Hello
         # 3. Prompt for ZIP
         return
