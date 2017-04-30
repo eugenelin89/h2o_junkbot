@@ -17,21 +17,21 @@ app.conf.update(
 
 
 @app.task
-def fb_process(data):
-    print 'fb_process( %s )' % (json.dumps(data, indent=4))
-    if 'message' in data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
-        fb_sender_id = data['entry'][0]['messaging'][0]['sender']['id']
-        fb_message = data['entry'][0]['messaging'][0]['message']['text']
-        fb_timestamp = data['entry'][0]['time']
+def fb_process(fb_data):
+    print 'fb_process( %s )' % (json.dumps(fb_data, indent=4))
+    if 'message' in fb_data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
+        fb_sender_id = fb_data['entry'][0]['messaging'][0]['sender']['id']
+        #fb_message = fb_data['entry'][0]['messaging'][0]['message']['text']
+        #fb_timestamp = fb_data['entry'][0]['time']
 
-        apiai_query = apiai.query(fb_sender_id, fb_message)
-        apiai_action = apiai_query.get('result').get('action')
-        apiai_intent = apiai_query.get('result').get('metadata').get('intentName')
-        apiai_parameters = apiai_query.get('result').get('parameters')
-        apiai_fulfillment_msg = apiai_query.get("result").get("fulfillment").get("speech")
-        print 'API.AI Query Result: %s' % (json.dumps(apiai_query, indent = 4))
-        
-        return fb.send_message(fb_sender_id, str(fb_message))
+        apiai_data = apiai.query(fb_sender_id, fb_message)
+        # apiai_action = apiai_data.get('result').get('action')
+        # apiai_intent = apiai_data.get('result').get('metadata').get('intentName')
+        # apiai_parameters = apiai_data.get('result').get('parameters')
+        # apiai_fulfillment_msg = apiai_data.get("result").get("fulfillment").get("speech")
+        print 'API.AI Query Result: %s' % (json.dumps(apiai_data, indent = 4))
+        state = state.get_state(fb_sender_id)
+        fb.send_message(fb_sender_id, str(fb_message))
     return
 
 @app.task
@@ -46,6 +46,7 @@ def save_conversation(timestamp, sender_id, sender_msg, response_msg):
 
 @app.task
 def process_user_response(sender_id, intent, parameters):
+    ''' Deprecating '''
     print('process_user_response(%s, %s, %s)'%(sender_id, intent, '{parameters}'))
     # test
     state = states.get_state(sender_id)

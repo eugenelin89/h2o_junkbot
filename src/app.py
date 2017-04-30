@@ -48,6 +48,7 @@ def process_message(bot_id):
 
 @app.route('/webhook', methods=['POST'])
 def webhook():
+    ''' Deprecating '''
     req = request.get_json(silent=True, force=True)
     print("Request:")
     print(json.dumps(req, indent=4))
@@ -60,6 +61,7 @@ def webhook():
 
 
 def processRequest(req):
+    ''' Deprecating '''
     # Get incoming message
     print('processRequest...')
     sender_id = req.get("originalRequest").get("data").get("sender").get("id")
