@@ -8,7 +8,7 @@ class State(object):
         self.sender_id = sender_id
         pass
 
-    def message_user(self, response_message):
+    def message_sender(self, response_message):
         pass
 
     @abstractmethod
@@ -18,10 +18,13 @@ class State(object):
 
 class INIT(State):
     def responds_to_sender(self, sender_message, nlp_data):
-        # 1. If smalltalk avail, reply with smalltalk
-        # 2. Say Hello
-        # 3.
         print 'INIT.responds_to_user'
+        # 1. If smalltalk avail, reply with smalltalk
+        action = nlp_data.get('result').get('action')
+        if action.strip().find('smalltalk') == 0:
+            print 'SMALL TALK'
+        # 2. Say Hello
+        # 3. Prompt for ZIP
         return
 
 class WAIT_FOR_ZIP(State):
