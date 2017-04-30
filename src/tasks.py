@@ -25,7 +25,7 @@ def fb_process(data):
         timestamp = data['entry'][0]['time']
         apiai_query = apiai.query(sender_id, message)
         apiai_action = apiai_query['result']['action']
-        apiai_intent = apiai_query['result']['metadata'].get('intentName')
+        apiai_intent = apiai_query['result'].get('metadata').get('intentName')
         #apiai_parameters =
         #apiai_fulfillment_msg =
         print 'API.AI Query Result: %s' % (json.dumps(apiai_query, indent = 4))
