@@ -12,7 +12,7 @@ class State(object):
         pass
 
     @abstractmethod
-    def responds_to_user(sender_id, message, nlp_data):
+    def responds_to_sender(sender_id, message, nlp_data):
         pass
 
 
