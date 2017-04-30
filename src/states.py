@@ -43,8 +43,10 @@ class INIT(State):
         return
 
 class WAIT_FOR_ZIP(State):
-
-        pass
+    def responds_to_sender(self, sender_message, nlp_data):
+        # 1. Extract ZIP Code. For now, assume whatever sent is the intended zip.
+        # 2. Send to PIPELINE for verifcation
+        self.message(['Current State is WAIT_FOR_ZIP'])
 
 #################################
 # Get Instance of a STATE object
