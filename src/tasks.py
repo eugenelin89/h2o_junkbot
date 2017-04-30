@@ -32,7 +32,6 @@ def fb_process(fb_data):
         print 'API.AI Query Result: %s' % (json.dumps(apiai_data, indent = 4))
         state = states.get_state(fb_sender_id)
         state.responds_to_sender(fb_sender_message, apiai_data)
-        fb.send_message(fb_sender_id, str(fb_sender_message))
     return
 
 @app.task

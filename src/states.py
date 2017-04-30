@@ -8,8 +8,11 @@ class State(object):
         self.sender_id = sender_id
         pass
 
-    def message_sender(self, response_message):
-        return fb.send_message(self.sender_id, response_message)
+    def message_sender(self, response_messages):
+        ''' takes a list of messages and will send in order '''
+        for message in response_messages:
+            fb.send_message(self.sender_id, message)
+        return
 
 
     @abstractmethod
@@ -23,8 +26,7 @@ class INIT(State):
         # 1. If smalltalk avail, reply with smalltalk
         action = nlp_data.get('result').get('action')
         if action.strip().find('smalltalk') == 0:
-            #smalltalk_resp = nlp_data.get("result").get("fulfillment").get("speech")
-            self.message_sender(nlp_data.get("result").get("fulfillment").get("speech"))
+            self.message_sender([nlp_data.get("result").get("fulfillment").get("speech")])
         # 2. Say Hello
         # 3. Prompt for ZIP
         return
