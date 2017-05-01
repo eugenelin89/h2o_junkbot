@@ -31,5 +31,5 @@ def set_context(sender_id, context, lifespan=3):
         }
     ]
     params = {'sessionId':sender_id}
-    res = requests.post(os.environ['APIAI_CONTEXT_URL'], params = params, json=data, headers=headers).json()
-    return res
+    res = requests.post(os.environ['APIAI_CONTEXT_URL'], params = params, json=data, headers=headers)
+    return 
