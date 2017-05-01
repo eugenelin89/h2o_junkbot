@@ -14,5 +14,22 @@ def query(sender_id, content):
         "sessionId":sender_id
     }
     params = {'v':os.environ['APIAI_VERSION']}
-    res = requests.post(os.environ['APIAI_URL'], params = params, json=data, headers=headers).json()
+    res = requests.post(os.environ['APIAI_QUERY_URL'], params = params, json=data, headers=headers).json()
+    return res
+
+
+def set_context(sender_id, context, lifespan=3):
+    headers = {
+        "Content-Type" : "application/json",
+        "Authorization" : os.environ['APIAI_AUTH'],
+        "Accept" : "application/json"
+    }
+    data = [
+        {
+            "name" : context,
+            "lifespan" : lifespan
+        }
+    ]
+    params = {'sessionId':sender_id}
+    res = requests.post(os.environ['APIAI_CONTEXT_URL'], params = params, json=data, headers=headers).json()
     return res

@@ -1,6 +1,7 @@
-import requests, json, actions, os, fb
+import requests, json, actions, os, fb, apiai
 from abc import ABCMeta, abstractmethod
 from messages import *
+from intents import *
 
 class State(object):
     __metaclass__ = ABCMeta
@@ -40,12 +41,29 @@ class INIT(State):
         self.message_sender([PROMPT_ZIP_MESSAGE])
         # 4. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
+        # 5. Set APIAI Context to WAIT_FOR_ZIP
+        apiai.set_context(self.sender_id, 'WAIT_FOR_ZIP')
         return
 
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data):
-        # 1. Extract ZIP Code. For now, assume whatever sent is the intended zip.
-        # 2. Send to PIPELINE for verifcation
+        zipcode = None
+        intent = nlp_data.get('result').get('metadata').get('intentName')
+        # Zipcode Intent
+        if intent and intentName == ZIPCODE_INTENT:
+            zipcode = nlp_data.get('result').get('parameters').get('zip-code')
+        # Sender small-talking
+        elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
+            # smalltalk back
+            self.message_sender([nlp_data.get("result").get("fulfillment").get("speech")])
+
+
+        # User sent stand-alone zipcode
+
+        # If zipcode extracted, send for verification
+        # Else, propmpt for zipcode again.
+
+
         self.message_sender(['Current State is WAIT_FOR_ZIP'])
 
 #################################
