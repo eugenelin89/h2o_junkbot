@@ -32,5 +32,5 @@ def set_context(sender_id, context, lifespan=3):
     ]
     params = {'sessionId':sender_id}
     res = requests.post(os.environ['APIAI_CONTEXT_URL'], params = params, json=data, headers=headers)
-    print 'set_context result: '+ str(res)
+    print 'set_context result: '+ res.text
     return
