@@ -47,7 +47,7 @@ class INIT(State):
 
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data):
-        zipcode = None
+        zipcode = ""
         intent = nlp_data.get('result').get('metadata').get('intentName')
         # Zipcode Intent
         if intent == ZIPCODE_INTENT:
@@ -71,7 +71,7 @@ class WAIT_FOR_ZIP(State):
         # Else, propmpt for zipcode again.
         # ToDo: What about area not serviced?
         myobe = obe.OBE()
-        is_zip_verified = myobe.is_zip_verified(zipcode)
+        is_zip_verified = myobe.is_zip_verified(zipcode.replace(' ',''))
         if zipcode and is_zip_verified:
             print 'ZIPCODE verified: '+zipcode
             self.message_sender(['ZIPCODE = '+zipcode])
