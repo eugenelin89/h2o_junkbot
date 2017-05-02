@@ -83,8 +83,8 @@ class WAIT_FOR_ZIP(State):
                 for timeslot in availabilities.get('timeslots'):
                     ts = dateutil.parser.parse(timeslot.get('start')).date
                     today = datetime.date.today()
-                    if ts == today:
-                    #if today.year == ts.year and today.month == ts.month and today.day == ts.day:
+                    #if ts == today:
+                    if today.year == ts.year and today.month == ts.month and today.day == ts.day:
                         counter = counter + 1
                         title = 'Today at\n %d:%02d' % (ts.hour, ts.minute)
                         qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
