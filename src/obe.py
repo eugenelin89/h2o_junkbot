@@ -29,6 +29,7 @@ class OBE(object):
         return is_verified
 
     def authenticate(self):
+        print 'authenticate with OBE'
         result = False
         url = os.environ['OBE_AUTH_URL']
         data = {
@@ -39,6 +40,7 @@ class OBE(object):
             'password': os.environ['OBE_PASSWORD']
         }
         res_json = requests.post(url, data=data).json()
+        print 'authenticate result: ' + json.dump(res_json, indent = 4)
         if 'access_toekn' in res_json.keys() and 'instance_url' in res_json.keys():
             self.access_token = res_json.get('access_token')
             self.instance_url = res_json.get('instance_url')
