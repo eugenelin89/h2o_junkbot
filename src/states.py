@@ -20,7 +20,7 @@ class State(object):
         print 'Setting next state to: '+ next_state
         url = os.environ['GET_STATE_URL']
         payload = {'state':next_state}
-        res = requests.post(url, json = payload, params = {'sender_id':self.sender_id}).json()
+        res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
         if res.status_code == requests.codes.ok:
             apiai.set_context(self.sender_id, 'WAIT_FOR_ZIP')
         return
