@@ -74,7 +74,7 @@ class WAIT_FOR_ZIP(State):
         zip_verification = myobe.is_zip_verified(zipcode.replace(' ',''))
         if zipcode and 'error' not in zip_verification.keys():
             print 'ZIPCODE verified: '+zipcode
-            self.message_sender(['ZIPCODE = '+zipcode])
+            self.message_sender([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
