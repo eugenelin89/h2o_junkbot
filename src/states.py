@@ -87,9 +87,8 @@ class WAIT_FOR_ZIP(State):
             if 'error' not in availabilities.keys():
                 counter = 0
                 for timeslot in availabilities.get('timeslots'):
-                    ts = dateutil.parser.parse(timeslot.get('start')).date
+                    ts = dateutil.parser.parse(timeslot.get('start'))
                     today = datetime.date.today()
-                    #if ts == today:
                     if today.year == ts.year and today.month == ts.month and today.day == ts.day:
                         counter = counter + 1
                         title = 'Today at\n %d:%02d' % (ts.hour, ts.minute)
