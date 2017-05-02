@@ -81,6 +81,7 @@ class WAIT_FOR_ZIP(State):
             if 'error' not in availabilities.keys():
                 counter = 0
                 for timeslot in availabilities.get('timeslots'):
+                    counter = counter + 1
                     qr.append({'content_type':'text', 'title':timeslot.get('start'), 'payload':timeslot.get('start')})
                     if counter > 5:
                         break
