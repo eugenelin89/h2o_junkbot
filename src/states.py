@@ -71,7 +71,7 @@ class WAIT_FOR_ZIP(State):
         # If zipcode extracted, send for verification
         # Else, propmpt for zipcode again.
         if zipcode and obe.is_zip_verified(zipcode):
-            priint 'ZIPCODE verified: '+zipcode
+            print 'ZIPCODE verified: '+zipcode
             self.message_sender(['ZIPCODE = '+zipcode])
 
 
