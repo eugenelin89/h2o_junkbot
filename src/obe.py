@@ -51,10 +51,6 @@ class OBE(object):
             'Authorization':'Bearer '+self.access_token,
             'Content-Type':'application/json; charset=utf-8'
         }
-        print url
-        print json.dumps(data, indent=4)
-        print json.dumps(headers, indent=4)
-
         res = requests.post(url, json = data, headers = headers)
 
         if res.status_code == requests.codes.ok and res.json().get('timeslots'):
