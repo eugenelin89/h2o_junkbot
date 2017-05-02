@@ -5,28 +5,29 @@ class OBE(object):
         self.access_token = None
         self.instance_url = None
 
-    def is_zip_verified(self, zip_code):
+    def is_zip_verified(self, zipcode):
         # Authenticate
-        is_verified = False
-        if not zip_code:
-            return False
+
+        if not zipcode:
+            return {'error':'zipcode is None'}
         is_authenticated = self.authenticate()
         if not is_authenticated:
-            return False
+            return {'error':'OBE Authentication error'}
 
         url = self.instance_url + os.environ['OBE_RESOURCE_PATH']
         headers = {
             "Authorization":'Bearer '+self.access_token
         }
         params = {
-            'from_postal_code':zip_code,
+            'from_postal_code':zipcode,
             'brand':os.environ['OBE_BRAND']
         }
         res = requests.get(url, params = params, headers = headers)
         print 'verify_zip result: '+ res.text
         if res.status_code == requests.codes.ok:
-            is_verified = True
-        return is_verified
+            return res.json()
+        else:
+            return {'error':'zipcode cannot be verified'}
 
     def authenticate(self):
         print 'authenticate with OBE'

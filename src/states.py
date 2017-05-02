@@ -71,14 +71,14 @@ class WAIT_FOR_ZIP(State):
         # Else, propmpt for zipcode again.
         # ToDo: What about area not serviced?
         myobe = obe.OBE()
-        is_zip_verified = myobe.is_zip_verified(zipcode.replace(' ',''))
-        if zipcode and is_zip_verified:
+        zip_verification = myobe.is_zip_verified(zipcode.replace(' ',''))
+        if zipcode and 'error' not in zip_verified.keys():
             print 'ZIPCODE verified: '+zipcode
             self.message_sender(['ZIPCODE = '+zipcode])
             # 1. Get availability,
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
-        elif zipcode and not is_zip_verified:
+        elif zipcode:
             # ZIPCODE was extracted but could not be verified.
             # Should ask sender to contact customer support
             print 'ZIPCODE cannot be verified: '+zipcode
