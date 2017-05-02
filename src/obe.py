@@ -43,7 +43,7 @@ class OBE(object):
             'franchise_id' : self.franchise_id,
             'start_date' : start_date,
             'end_date' : end_date,
-            'postal_code' : self.zipcode#,
+            #'postal_code' : self.zipcode,
             #'brand' : os.environ['OBE_BRAND']
         }
         headers = {
