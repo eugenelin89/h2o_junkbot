@@ -47,7 +47,6 @@ class INIT(State):
 
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data):
-        self.message_sender(['Current State is WAIT_FOR_ZIP'])
         zipcode = None
         intent = nlp_data.get('result').get('metadata').get('intentName')
         # Zipcode Intent
