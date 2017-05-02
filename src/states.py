@@ -20,7 +20,9 @@ class State(object):
         print 'Setting next state to: '+ next_state
         url = os.environ['GET_STATE_URL']
         payload = {'state':next_state}
-        requests.post(url, json = payload, params = {'sender_id':self.sender_id}).json()
+        res = requests.post(url, json = payload, params = {'sender_id':self.sender_id}).json()
+        if res.status_code == requests.codes.ok:
+            apiai.set_context(self.sender_id, 'WAIT_FOR_ZIP')
         return
 
     @abstractmethod
@@ -41,8 +43,6 @@ class INIT(State):
         self.message_sender([PROMPT_ZIP_MESSAGE])
         # 4. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
-        # 5. Set APIAI Context to WAIT_FOR_ZIP
-        apiai.set_context(self.sender_id, 'WAIT_FOR_ZIP')
         return
 
 class WAIT_FOR_ZIP(State):
