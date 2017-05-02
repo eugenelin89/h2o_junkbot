@@ -3,9 +3,11 @@ import os, requests
 def is_zip_verified(zip_code):
     # Authenticate
     verified = False
+    if not zip_code:
+        return False
     auth = authenticate()
     if 'error' in auth.keys():
-        return verified
+        return False
     access_token = auth['access_token']
     instance_url = auth['instance_url']
     url = instance_url + os.environ['OBE_RESOURCE_PATH']
