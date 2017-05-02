@@ -49,8 +49,8 @@ class OBE(object):
             'franchise_id' : self.franchise_id
         }
         headers = {
-            'Authorization':'Bearer '+self.access_token,
-            'Content-Type':'application/json'
+            'Authorization':'Bearer '+self.access_token#,
+            #'Content-Type':'application/json'
         }
         print url
         print json.dumps(data, indent=4)
