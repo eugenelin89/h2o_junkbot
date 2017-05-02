@@ -56,13 +56,11 @@ class WAIT_FOR_ZIP(State):
         elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
             # smalltalk back
             self.message_sender([nlp_data.get("result").get("fulfillment").get("speech")])
-
-
         # User sent stand-alone zipcode
-
         # If zipcode extracted, send for verification
         # Else, propmpt for zipcode again.
-
+        if zipcode:
+            pass
 
         self.message_sender(['Current State is WAIT_FOR_ZIP'])
 
