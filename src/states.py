@@ -70,6 +70,7 @@ class WAIT_FOR_ZIP(State):
 
         # If zipcode extracted, send for verification
         # Else, propmpt for zipcode again.
+        # ToDo: What about area not serviced?
         is_zip_verified = obe.is_zip_verified(zipcode)
         if zipcode and is_zip_verified:
             print 'ZIPCODE verified: '+zipcode
