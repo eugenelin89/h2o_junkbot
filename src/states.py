@@ -49,6 +49,10 @@ class ZIP_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data):
         print 'DO NOTHING...'
 
+class WAIT_FOR_TIMESLOT(State):
+    def responds_to_sender(self, sender_message, nlp_data):
+        pass
+
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data):
         self.set_next_state('ZIP_SUBMITTED') # TRANSIENT STATE
