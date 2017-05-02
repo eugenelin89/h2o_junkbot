@@ -45,8 +45,13 @@ class INIT(State):
         result = self.set_next_state('WAIT_FOR_ZIP')
         return
 
+class ZIP_SUBMITTED(State):
+    def responds_to_sender(self, sender_message, nlp_data):
+        print 'DO NOTHING...'
+
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data):
+        self.set_next_state('ZIP_SUBMITTED') # TRANSIENT STATE
         zipcode = ""
         intent = nlp_data.get('result').get('metadata').get('intentName')
         # Zipcode Intent
@@ -73,6 +78,7 @@ class WAIT_FOR_ZIP(State):
         my_obe = obe.OBE()
         zip_verification = my_obe.is_zip_verified(zipcode.replace(' ',''))
         if zipcode and 'error' not in zip_verification.keys():
+            # ZIPCODE VERIFIED
             print 'ZIPCODE verified: '+zipcode
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
