@@ -1,4 +1,4 @@
-import os, requests, json, datetime, logging
+import os, requests, json, datetime
 
 class OBE(object):
     def __init__(self):
@@ -26,20 +26,6 @@ class OBE(object):
             'brand':os.environ['OBE_BRAND']
         }
 
-        # FOR DEBUG
-        try:
-            import http.client as http_client
-        except ImportError:
-            # Python 2
-            import httplib as http_client
-        http_client.HTTPConnection.debuglevel = 1
-        logging.basicConfig()
-        logging.getLogger().setLevel(logging.DEBUG)
-        requests_log = logging.getLogger("requests.packages.urllib3")
-        requests_log.setLevel(logging.DEBUG)
-        requests_log.propagate = True
-        # END OF DEBUG
-
         res = requests.get(url, params = params, headers = headers)
         print 'verify_zip result: '+ res.text
         if res.status_code == requests.codes.ok:
@@ -61,15 +47,6 @@ class OBE(object):
             'postal_code' : self.zipcode,
             'brand' : os.environ['OBE_BRAND']
         }
-
-        test_data = {
-            #"franchise_id": "001g000001Pt5IyAAJ",
-            #"start_date": "2017-05-02",
-            #"end_date": "2017-05-28",
-            "postal_code": "V3W1M1",
-            "brand" : "1-800-Got-Junk?"
-        }
-
         headers = {
             'Authorization':'Bearer '+self.access_token,
             'Content-Type':'application/json; charset=utf-8'
