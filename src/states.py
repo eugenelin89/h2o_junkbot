@@ -10,10 +10,10 @@ class State(object):
         self.sender_id = sender_id
         pass
 
-    def message_sender(self, response_messages, quick_reply = None):
+    def send_messages(self, response_messages, quick_reply = None):
         ''' takes a list of messages and will send in order '''
         for message in response_messages:
-            fb.send_message(self.sender_id, message, quick_reply = quick_reply)
+            fb.send_message(self.sender_id, message, quick_reply)
         return
 
     def set_next_state(self, next_state):
@@ -36,11 +36,11 @@ class INIT(State):
         # 1. If smalltalk avail, reply with smalltalk
         action = nlp_data.get('result').get('action')
         if action.strip().find('smalltalk') == 0:
-            self.message_sender([nlp_data.get("result").get("fulfillment").get("speech")])
+            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech")])
         # 2. Say Hello
-        self.message_sender([HELLO_MESSAGE_1, HELLO_MESSAGE_2])
+        self.send_messages([HELLO_MESSAGE_1, HELLO_MESSAGE_2])
         # 3. Prompt for ZIP
-        self.message_sender([PROMPT_ZIP_MESSAGE])
+        self.send_messages([PROMPT_ZIP_MESSAGE])
         # 4. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
         return
@@ -56,7 +56,7 @@ class WAIT_FOR_ZIP(State):
         # Sender small-talking
         elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
             # smalltalk back
-            self.message_sender([nlp_data.get("result").get("fulfillment").get("speech")])
+            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech")])
         # User sent stand-alone zipcode
         else:
             # try search for zipcode in sender_message
@@ -74,24 +74,25 @@ class WAIT_FOR_ZIP(State):
         zip_verification = my_obe.is_zip_verified(zipcode.replace(' ',''))
         if zipcode and 'error' not in zip_verification.keys():
             print 'ZIPCODE verified: '+zipcode
-            self.message_sender([ZIP_RECEIVED % (zipcode)])
+            self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
             availabilities = my_obe.get_availabilities()
             if 'error' not in availabilities.keys():
+                qr = []
                 for timeslot in availabilities.get('timeslots'):
-                    qr = [{'content_type':'text', 'title':'SELECT', 'payload':timeslot.get('start')}]
-                    self.message_sender([timeslot.get('start')], qr)
+                    qr.append({'content_type':'text', 'title':'SELECT', 'payload':timeslot.get('start')})
+                self.send_messages([SELECT_TIMSLOT], qr)
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
         elif zipcode:
             # ZIPCODE was extracted but could not be verified.
             # Should ask sender to contact customer support
             print 'ZIPCODE cannot be verified: '+zipcode
-            self.message_sender([UNVERFIABLE_ZIP])
+            self.send_messages([UNVERFIABLE_ZIP])
             self.set_next_state('INIT')
         else:
             # missing zipcode
-            self.message_sender([MISSING_ZIP, PROMPT_ZIP_MESSAGE])
+            self.send_messages([MISSING_ZIP, PROMPT_ZIP_MESSAGE])
             self.set_next_state('WAIT_FOR_ZIP') # stay in this state
         return
 
