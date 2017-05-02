@@ -81,7 +81,7 @@ class WAIT_FOR_ZIP(State):
                 qr = []
                 for timeslot in availabilities.get('timeslots'):
                     qr.append({'content_type':'text', 'title':'SELECT', 'payload':timeslot.get('start')})
-                self.send_messages([SELECT_TIMSLOT], qr)
+                self.send_messages([SELECT_TIMESLOT], qr)
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
         elif zipcode:
