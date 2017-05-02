@@ -78,7 +78,7 @@ class OBE(object):
         print json.dumps(data, indent=4)
         print json.dumps(headers, indent=4)
 
-        res = requests.post(url, data = test_data, headers = headers)
+        res = requests.post(url, json = test_data, headers = headers)
 
         if res.status_code == requests.codes.ok and res.json().get('timeslots'):
             print 'availabilities returned'
