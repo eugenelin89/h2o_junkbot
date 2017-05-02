@@ -13,7 +13,7 @@ def is_zip_verified(zip_code):
         "Authorization":'Bearer '+access_token
     }
     params = {
-        'from_postal_code':zip_code
+        'from_postal_code':zip_code, 
         'brand':os.environ['OBE_BRAND']
     }
     res = requests.get(url, params = params, headers = headers)
