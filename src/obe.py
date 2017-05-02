@@ -1,4 +1,4 @@
-import os, requests, json
+import os, requests, json, datetime
 
 class OBE(object):
     def __init__(self):
@@ -6,6 +6,7 @@ class OBE(object):
         self.access_token = None
         self.instance_url = None
         self.franchise_id = None
+        self.zipcode = None
 
     def is_zip_verified(self, zipcode):
         # Authenticate
@@ -16,7 +17,7 @@ class OBE(object):
         if not is_authenticated:
             return {'error':'OBE Authentication error'}
 
-        url = self.instance_url + os.environ['OBE_RESOURCE_PATH']
+        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_VERIFY_AREA']
         headers = {
             "Authorization":'Bearer '+self.access_token
         }
@@ -28,13 +29,29 @@ class OBE(object):
         print 'verify_zip result: '+ res.text
         if res.status_code == requests.codes.ok:
             self.franchise_id = res.json().get('franchise_id')
+            self.zipcode = zipcode
             return res.json()
         else:
             return {'error':'zipcode cannot be verified'}
 
     def get_availabilities(self):
-
-        pass
+        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_AVAILABILITY']
+        data = {
+            'franchise_id' = self.franchise_id,
+            'start_date' = datetime.date.today().isoformat(),
+            'end_date' = (datetime.date.today() + datetime.timedelta(days=2)).isoformat(),
+            'postal_code' = self.zipcode
+            'brand' = os.environ['OBE_BRAND']
+        }
+        headers = {
+            'Authorization':'Bearer '+self.access_token,
+            'Content-Type':'application/json'
+        }
+        res = requests.post(url, data=data, headers=headers)
+        if res.status_code == requests.codes.ok and res.json().get('timeslots'):
+            return res.json()
+        else:
+            return {'error':res.text}
 
     def __authenticate(self):
         print 'authenticate with OBE'
