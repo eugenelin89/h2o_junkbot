@@ -74,7 +74,7 @@ class WAIT_FOR_ZIP(State):
         if zipcode and is_zip_verified:
             print 'ZIPCODE verified: '+zipcode
             self.message_sender(['ZIPCODE = '+zipcode])
-        elif zipcode and !is_zip_verified:
+        elif zipcode and not is_zip_verified:
             print 'ZIPCODE cannot be verified: '+zipcode
             self.message_sender([BAD_ZIP, PROMPT_ZIP_MESSAGE])
         else:
