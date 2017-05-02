@@ -37,11 +37,11 @@ class OBE(object):
     def get_availabilities(self):
         url = self.instance_url + os.environ['OBE_RESOURCE_PATH_AVAILABILITY']
         data = {
-            'franchise_id' = self.franchise_id,
-            'start_date' = datetime.date.today().isoformat(),
-            'end_date' = (datetime.date.today() + datetime.timedelta(days=2)).isoformat(),
-            'postal_code' = self.zipcode
-            'brand' = os.environ['OBE_BRAND']
+            'franchise_id' : self.franchise_id,
+            'start_date' : datetime.date.today().isoformat(),
+            'end_date' : (datetime.date.today() + datetime.timedelta(days=2)).isoformat(),
+            'postal_code' : self.zipcode
+            'brand' : os.environ['OBE_BRAND']
         }
         headers = {
             'Authorization':'Bearer '+self.access_token,
