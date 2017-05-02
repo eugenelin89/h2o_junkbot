@@ -79,8 +79,7 @@ class WAIT_FOR_ZIP(State):
             availabilities = my_obe.get_availabilities()
             if 'error' not in availabilities.keys():
                 for timeslot in availabilities.get('timeslots'):
-                    print timeslot
-                    qr = [{'content_type':'text', 'title':'SELECT', 'payload':timeslot}]
+                    qr = [{'content_type':'text', 'title':'SELECT', 'payload':timeslot.get('start')}]
                     self.message_sender([timeslot.get('start')], qr)
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
