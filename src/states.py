@@ -83,9 +83,11 @@ class WAIT_FOR_ZIP(State):
                 for timeslot in availabilities.get('timeslots'):
                     counter = counter + 1
                     qr.append({'content_type':'text', 'title':timeslot.get('start'), 'payload':timeslot.get('start')})
-                    if counter > 5:
+                    if counter >= 5:
                         break
                 print str(qr)
+                self.send_messages([SELECT_TIMESLOT], qr)
+                self.send_messages([SELECT_TIMESLOT], qr)
                 self.send_messages([SELECT_TIMESLOT], qr)
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
