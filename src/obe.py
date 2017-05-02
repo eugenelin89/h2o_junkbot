@@ -40,13 +40,11 @@ class OBE(object):
         start_date = datetime.date.today().isoformat()
         end_date = (datetime.date.today() + datetime.timedelta(days=2)).isoformat()
         data = {
-            #'franchise_id' : self.franchise_id,
-            #'start_date' : start_date,
-            #'end_date' : end_date,
-            #'postal_code' : self.zipcode,
-            #'brand' : os.environ['OBE_BRAND']
-
-            'franchise_id' : self.franchise_id
+            'franchise_id' : self.franchise_id,
+            'start_date' : start_date,
+            'end_date' : end_date,
+            'postal_code' : self.zipcode,
+            'brand' : os.environ['OBE_BRAND']
         }
         headers = {
             'Authorization':'Bearer '+self.access_token,
