@@ -87,8 +87,8 @@ class WAIT_FOR_ZIP(State):
                         counter = counter + 1
                         title = '%d:%02d' % (ts.hour, ts.minute)
                         qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
-                    if counter >= 5:
-                        break
+                    #if counter > 5:
+                    #    break
                 print str(qr)
                 self.send_messages([SELECT_TIMESLOT], qr)
 
