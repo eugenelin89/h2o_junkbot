@@ -1,4 +1,4 @@
-import os, requests, json, datetime
+import os, requests, json, datetime, logging
 
 class OBE(object):
     def __init__(self):
@@ -25,6 +25,21 @@ class OBE(object):
             'from_postal_code':zipcode,
             'brand':os.environ['OBE_BRAND']
         }
+
+        # FOR DEBUG
+        try:
+            import http.client as http_client
+        except ImportError:
+            # Python 2
+            import httplib as http_client
+        http_client.HTTPConnection.debuglevel = 1
+        logging.basicConfig()
+        logging.getLogger().setLevel(logging.DEBUG)
+        requests_log = logging.getLogger("requests.packages.urllib3")
+        requests_log.setLevel(logging.DEBUG)
+        requests_log.propagate = True
+        # END OF DEBUG
+
         res = requests.get(url, params = params, headers = headers)
         print 'verify_zip result: '+ res.text
         if res.status_code == requests.codes.ok:
@@ -64,6 +79,7 @@ class OBE(object):
         print json.dumps(headers, indent=4)
 
         res = requests.post(url, data = test_data, headers = headers)
+
         if res.status_code == requests.codes.ok and res.json().get('timeslots'):
             print 'availabilities returned'
             return res.json()
