@@ -51,7 +51,7 @@ class WAIT_FOR_ZIP(State):
         zipcode = None
         intent = nlp_data.get('result').get('metadata').get('intentName')
         # Zipcode Intent
-        if intent and intentName == ZIPCODE_INTENT:
+        if intent == ZIPCODE_INTENT:
             print 'ZIP found by ZIPCODE_INTENT'
             zipcode = nlp_data.get('result').get('parameters').get('zip-code')
         # Sender small-talking
