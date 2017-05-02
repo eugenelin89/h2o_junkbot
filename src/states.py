@@ -1,4 +1,4 @@
-import requests, json, actions, os, fb, apiai
+import requests, json, actions, os, fb, apiai, re, obe
 from abc import ABCMeta, abstractmethod
 from messages import *
 from intents import *
@@ -47,22 +47,37 @@ class INIT(State):
 
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data):
+        self.message_sender(['Current State is WAIT_FOR_ZIP'])
         zipcode = None
         intent = nlp_data.get('result').get('metadata').get('intentName')
         # Zipcode Intent
         if intent and intentName == ZIPCODE_INTENT:
+            print 'ZIP found by ZIPCODE_INTENT'
             zipcode = nlp_data.get('result').get('parameters').get('zip-code')
         # Sender small-talking
         elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
             # smalltalk back
             self.message_sender([nlp_data.get("result").get("fulfillment").get("speech")])
         # User sent stand-alone zipcode
+        else:
+            # try search for zipcode in sender_message
+            print 'Matching ZIP based on regex...'
+            pattern = r'(\d{5}(-\d{4})?$)|([ABCEGHJKLMNPRSTVXY]{1}\d{1}[A-Z]{1} *\d{1}[A-Z]{1}\d{1}$)'
+            p = re.compile(pattern)
+            r = p.search(sender_message.upper())
+            if r:
+                zipcode = r.group()
+
         # If zipcode extracted, send for verification
         # Else, propmpt for zipcode again.
-        if zipcode:
-            pass
+        if zipcode and obe.is_zip_verified(zipcode):
+            priint 'ZIPCODE verified: '+zipcode
+            self.message_sender(['ZIPCODE = '+zipcode])
 
-        self.message_sender(['Current State is WAIT_FOR_ZIP'])
+
+        return
+
+
 
 #################################
 # Get Instance of a STATE object
