@@ -40,18 +40,21 @@ class OBE(object):
         start_date = datetime.date.today().isoformat()
         end_date = (datetime.date.today() + datetime.timedelta(days=2)).isoformat()
         data = {
-            #'franchise_id' : self.franchise_id,
-            #'start_date' : start_date,
-            #'end_date' : end_date,
-            #'postal_code' : self.zipcode,
-            #'brand' : os.environ['OBE_BRAND']
+            'franchise_id' : self.franchise_id,
+            'start_date' : start_date,
+            'end_date' : end_date,
+            'postal_code' : self.zipcode,
+            'brand' : os.environ['OBE_BRAND']
+        }
 
+        test_data = {
             "franchise_id": "001g000001Pt5IyAAJ",
-            "start_date": "2017-05-02",
-            "end_date": "2017-05-28",
-            "postal_code": "V3W1M1",
+            #"start_date": "2017-05-02",
+            #"end_date": "2017-05-28",
+            #"postal_code": "V3W1M1",
             "brand" : "1-800-Got-Junk?"
         }
+
         headers = {
             'Authorization':'Bearer '+self.access_token,
             'Content-Type':'application/json; charset=utf-8'
@@ -60,7 +63,7 @@ class OBE(object):
         print json.dumps(data, indent=4)
         print json.dumps(headers, indent=4)
 
-        res = requests.post(url, data = data, headers = headers)
+        res = requests.post(url, data = test_data, headers = headers)
         if res.status_code == requests.codes.ok and res.json().get('timeslots'):
             print 'availabilities returned'
             return res.json()
