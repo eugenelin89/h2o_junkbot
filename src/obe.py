@@ -41,7 +41,7 @@ class OBE(object):
         }
         res_json = requests.post(url, data=data).json()
         print 'authenticate result: ' + json.dumps(res_json, indent = 4)
-        if 'access_toekn' in res_json.keys() and 'instance_url' in res_json.keys():
+        if 'access_token' in res_json.keys() and 'instance_url' in res_json.keys():
             self.access_token = res_json.get('access_token')
             self.instance_url = res_json.get('instance_url')
             result = True
