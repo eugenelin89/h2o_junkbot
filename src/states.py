@@ -70,11 +70,17 @@ class WAIT_FOR_ZIP(State):
 
         # If zipcode extracted, send for verification
         # Else, propmpt for zipcode again.
-        if zipcode and obe.is_zip_verified(zipcode):
+        is_zip_verified = obe.is_zip_verified(zipcode)
+        if zipcode and is_zip_verified:
             print 'ZIPCODE verified: '+zipcode
             self.message_sender(['ZIPCODE = '+zipcode])
-
-
+        elif zipcode and !is_zip_verified:
+            print 'ZIPCODE cannot be verified: '+zipcode
+            self.message_sender([BAD_ZIP, PROMPT_ZIP_MESSAGE])
+        else:
+            # missing zipcode
+            self.message_sender([MISSING_ZIP, PROMPT_ZIP_MESSAGE])
+            self.set_next_state('WAIT_FOR_ZIP') # stay in this state
         return
 
 
