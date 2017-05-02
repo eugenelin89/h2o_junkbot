@@ -50,7 +50,7 @@ class OBE(object):
         }
         headers = {
             'Authorization':'Bearer '+self.access_token,
-            'Content-Type":"application/json; charset=utf-8'
+            'Content-Type':'application/json; charset=utf-8'
         }
         print url
         print json.dumps(data, indent=4)
