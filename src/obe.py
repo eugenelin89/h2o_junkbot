@@ -2,15 +2,17 @@ import os, requests, json
 
 class OBE(object):
     def __init__(self):
+        # OBE related detail should be encapsulated in the OBE object
         self.access_token = None
         self.instance_url = None
+        self.franchise_id = None
 
     def is_zip_verified(self, zipcode):
         # Authenticate
 
         if not zipcode:
             return {'error':'zipcode is None'}
-        is_authenticated = self.authenticate()
+        is_authenticated = self.__authenticate()
         if not is_authenticated:
             return {'error':'OBE Authentication error'}
 
@@ -25,11 +27,15 @@ class OBE(object):
         res = requests.get(url, params = params, headers = headers)
         print 'verify_zip result: '+ res.text
         if res.status_code == requests.codes.ok:
+            self.franchise_id = res.json().get('franchise_id')
             return res.json()
         else:
             return {'error':'zipcode cannot be verified'}
 
-    def authenticate(self):
+    def __get_availabilities(self):
+        pass
+
+    def __authenticate(self):
         print 'authenticate with OBE'
         result = False
         url = os.environ['OBE_AUTH_URL']
