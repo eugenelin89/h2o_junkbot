@@ -46,7 +46,7 @@ class OBE(object):
             #'postal_code' : self.zipcode,
             #'brand' : os.environ['OBE_BRAND']
 
-            'postal_code' : self.zipcode
+            'start_date' : start_date
         }
         headers = {
             'Authorization':'Bearer '+self.access_token,
