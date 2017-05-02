@@ -1,4 +1,4 @@
-import os, requests
+import os, requests, json
 
 class OBE(object):
     def __init__(self):
@@ -40,7 +40,7 @@ class OBE(object):
             'password': os.environ['OBE_PASSWORD']
         }
         res_json = requests.post(url, data=data).json()
-        print 'authenticate result: ' + json.dump(res_json, indent = 4)
+        print 'authenticate result: ' + json.dumps(res_json, indent = 4)
         if 'access_toekn' in res_json.keys() and 'instance_url' in res_json.keys():
             self.access_token = res_json.get('access_token')
             self.instance_url = res_json.get('instance_url')
