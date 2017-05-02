@@ -40,7 +40,7 @@ class OBE(object):
             'franchise_id' : self.franchise_id,
             'start_date' : datetime.date.today().isoformat(),
             'end_date' : (datetime.date.today() + datetime.timedelta(days=2)).isoformat(),
-            'postal_code' : self.zipcode
+            'postal_code' : self.zipcode,
             'brand' : os.environ['OBE_BRAND']
         }
         headers = {
