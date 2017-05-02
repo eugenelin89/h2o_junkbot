@@ -13,7 +13,7 @@ class State(object):
     def message_sender(self, response_messages, quick_reply = None):
         ''' takes a list of messages and will send in order '''
         for message in response_messages:
-            fb.send_message(self.sender_id, message, quick_reply)
+            fb.send_message(self.sender_id, message, quick_reply = quick_reply)
         return
 
     def set_next_state(self, next_state):
@@ -86,7 +86,7 @@ class WAIT_FOR_ZIP(State):
             # ZIPCODE was extracted but could not be verified.
             # Should ask sender to contact customer support
             print 'ZIPCODE cannot be verified: '+zipcode
-            self.message_sender([UNVERFIABLE_ZIP], 'SELECT')
+            self.message_sender([UNVERFIABLE_ZIP], quick_reply = 'SELECT')
             self.set_next_state('INIT')
         else:
             # missing zipcode
