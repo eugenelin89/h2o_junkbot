@@ -78,8 +78,6 @@ class WAIT_FOR_ZIP(State):
             # 1. Get availability,
             availabilities = my_obe.get_availabilities()
             if 'error' not in availabilities.keys():
-
-                counter =
                 for timeslot in availabilities.get('timeslots'):
                     qr.append({'content_type':'text', 'title':'SELECT', 'payload':timeslot.get('start')})
                 print str(qr)
