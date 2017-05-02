@@ -5,7 +5,7 @@ class OBE(object):
         self.access_token = None
         self.instance_url = None
 
-    def is_zip_verified(zip_code):
+    def is_zip_verified(self, zip_code):
         # Authenticate
         is_verified = False
         if not zip_code:
@@ -28,24 +28,19 @@ class OBE(object):
             is_verified = True
         return is_verified
 
-
-
-
-    # Get result from OBE
-
-def authenticate():
-    result = False
-    url = os.environ['OBE_AUTH_URL']
-    data = {
-        'grant_type':'password',
-        'client_id': os.environ['OBE_CLIENT_ID'],
-        'client_secret': os.environ['OBE_CLIENT_SECRET'],
-        'username': os.environ['OBE_USERNAME'],
-        'password': os.environ['OBE_PASSWORD']
-    }
-    res_json = requests.post(url, data=data).json()
-    if 'access_toekn' in res_json.keys() and 'instance_url' in res_json.keys():
-        self.access_token = res_json.get('access_token')
-        self.instance_url = res_json.get('instance_url')
-        result = True
-    return result
+    def authenticate(self):
+        result = False
+        url = os.environ['OBE_AUTH_URL']
+        data = {
+            'grant_type':'password',
+            'client_id': os.environ['OBE_CLIENT_ID'],
+            'client_secret': os.environ['OBE_CLIENT_SECRET'],
+            'username': os.environ['OBE_USERNAME'],
+            'password': os.environ['OBE_PASSWORD']
+        }
+        res_json = requests.post(url, data=data).json()
+        if 'access_toekn' in res_json.keys() and 'instance_url' in res_json.keys():
+            self.access_token = res_json.get('access_token')
+            self.instance_url = res_json.get('instance_url')
+            result = True
+        return result
