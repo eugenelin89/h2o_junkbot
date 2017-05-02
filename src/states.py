@@ -72,7 +72,7 @@ class WAIT_FOR_ZIP(State):
         # ToDo: What about area not serviced?
         myobe = obe.OBE()
         zip_verification = myobe.is_zip_verified(zipcode.replace(' ',''))
-        if zipcode and 'error' not in zip_verified.keys():
+        if zipcode and 'error' not in zip_verification.keys():
             print 'ZIPCODE verified: '+zipcode
             self.message_sender(['ZIPCODE = '+zipcode])
             # 1. Get availability,
