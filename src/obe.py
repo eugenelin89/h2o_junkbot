@@ -32,7 +32,8 @@ class OBE(object):
         else:
             return {'error':'zipcode cannot be verified'}
 
-    def __get_availabilities(self):
+    def get_availabilities(self):
+
         pass
 
     def __authenticate(self):
