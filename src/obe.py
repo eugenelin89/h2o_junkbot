@@ -35,6 +35,7 @@ class OBE(object):
             return {'error':'zipcode cannot be verified'}
 
     def get_availabilities(self):
+        print 'get_availability()'
         url = self.instance_url + os.environ['OBE_RESOURCE_PATH_AVAILABILITY']
         data = {
             'franchise_id' : self.franchise_id,
@@ -49,8 +50,10 @@ class OBE(object):
         }
         res = requests.post(url, data=data, headers=headers)
         if res.status_code == requests.codes.ok and res.json().get('timeslots'):
+            print 'availabilities returned'
             return res.json()
         else:
+            print 'error occurred in get_availabilities: '+res.text
             return {'error':res.text}
 
     def __authenticate(self):
