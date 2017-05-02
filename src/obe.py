@@ -48,10 +48,10 @@ class OBE(object):
         }
 
         test_data = {
-            "franchise_id": "001g000001Pt5IyAAJ",
+            #"franchise_id": "001g000001Pt5IyAAJ",
             #"start_date": "2017-05-02",
             #"end_date": "2017-05-28",
-            #"postal_code": "V3W1M1",
+            "postal_code": "V3W1M1",
             "brand" : "1-800-Got-Junk?"
         }
 
