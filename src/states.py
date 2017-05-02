@@ -94,6 +94,7 @@ class WAIT_FOR_ZIP(State):
                         title = 'Today at %d:%02d' % (ts.hour, ts.minute)
                         qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
                     else:
+                        counter = counter + 1
                         d = ts.strftime("%A, %B %d")
                         title = '%s at %d:%02d' % (d, ts.hour, ts.minute)
                         qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
