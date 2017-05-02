@@ -79,14 +79,22 @@ class WAIT_FOR_ZIP(State):
             availabilities = my_obe.get_availabilities()
             if 'error' not in availabilities.keys():
                 for timeslot in availabilities.get('timeslots'):
-                    self.message_sender([timeslot.get('start')])
+                    quick_reply =
+                    [
+                        {
+                            "content_type":"text",
+                            "title":"SELECT",
+                            "payload":timeslot
+                        }
+                    ]
+                    self.message_sender([timeslot.get('start')], quick_reply)
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
         elif zipcode:
             # ZIPCODE was extracted but could not be verified.
             # Should ask sender to contact customer support
             print 'ZIPCODE cannot be verified: '+zipcode
-            self.message_sender([UNVERFIABLE_ZIP], quick_reply = 'SELECT')
+            self.message_sender([UNVERFIABLE_ZIP])
             self.set_next_state('INIT')
         else:
             # missing zipcode
