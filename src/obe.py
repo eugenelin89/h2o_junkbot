@@ -37,10 +37,12 @@ class OBE(object):
     def get_availabilities(self):
         print 'get_availability()'
         url = self.instance_url + os.environ['OBE_RESOURCE_PATH_AVAILABILITY']
+        start_date = datetime.date.today().isoformat()
+        end_date = (datetime.date.today() + datetime.timedelta(days=2)).isoformat()
         data = {
             'franchise_id' : self.franchise_id,
-            'start_date' : datetime.date.today().isoformat(),
-            'end_date' : (datetime.date.today() + datetime.timedelta(days=2)).isoformat(),
+            'start_date' : start_date,
+            'end_date' : to_date,
             'postal_code' : self.zipcode,
             'brand' : os.environ['OBE_BRAND']
         }
@@ -48,6 +50,10 @@ class OBE(object):
             'Authorization':'Bearer '+self.access_token,
             'Content-Type':'application/json'
         }
+        print url
+        print json.dumps(data, indent=4)
+        print json.dumps(headers, indent=4)
+
         res = requests.post(url, data=data, headers=headers)
         if res.status_code == requests.codes.ok and res.json().get('timeslots'):
             print 'availabilities returned'
