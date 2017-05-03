@@ -93,11 +93,11 @@ class WAIT_FOR_ZIP(State):
                     today = datetime.date.today()
                     counter = counter + 1
                     title = ts.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
-                    qr.append({'type':'postback', 'title':title, 'payload':timeslot.get('start')})
+                    qr.append({'type':'text', 'title':title, 'payload':timeslot.get('start')})
                     if counter > 2:
                         break
                 print str(qr)
-                self.send_messages([SELECT_TIMESLOT], buttons=qr)
+                self.send_messages([SELECT_TIMESLOT], quick_reply=qr)
                 self.set_next_state('WAIT_FOR_TIMESLOT')
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
