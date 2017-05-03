@@ -50,6 +50,8 @@ class INIT(State):
 
 class WAIT_FOR_TIMESLOT(State):
     def responds_to_sender(self, sender_message, nlp_data):
+        self.set_next_state('TIMESLOT_SUBMITTED')
+
         pass
 
 class WAIT_FOR_ZIP(State):
@@ -81,6 +83,7 @@ class WAIT_FOR_ZIP(State):
         zip_verification = my_obe.is_zip_verified(zipcode.replace(' ',''))
         if zipcode and 'error' not in zip_verification.keys():
             # ZIPCODE VERIFIED
+            franchise_id = zip_verification.get('franchise_id')
             print 'ZIPCODE verified: '+zipcode
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
@@ -118,9 +121,11 @@ class WAIT_FOR_ZIP(State):
     ####################
 
     class ZIP_SUBMITTED(State):
-        ''' Transient State  '''
         def responds_to_sender(self, sender_message, nlp_data):
-            print 'DO NOTHING...'
+            pass
+    class TIMESLOT_SUBMITTED(State):
+        def responds_to_sender(self, sender_message, nlp_data):
+            pass
 
 #################################
 # Get Instance of a STATE object
