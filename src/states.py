@@ -1,4 +1,5 @@
-import requests, json, os, fb, apiai, re, obe, dateutil.parser, datetime
+import requests, json, os, re, dateutil.parser, datetime
+import fb, apiai, obe
 from abc import ABCMeta, abstractmethod
 from messages import *
 from intents import *
@@ -93,15 +94,10 @@ class WAIT_FOR_ZIP(State):
                 for timeslot in availabilities.get('timeslots'):
                     ts = dateutil.parser.parse(timeslot.get('start'))
                     today = datetime.date.today()
-                    if today.year == ts.year and today.month == ts.month and today.day == ts.day:
-                        counter = counter + 1
-                        title = 'Today at %d:%02d' % (ts.hour, ts.minute)
-                        qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
-                    else:
-                        counter = counter + 1
-                        d = ts.strftime("%A, %B %d")
-                        title = '%s at %d:%02d' % (d, ts.hour, ts.minute)
-                        qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
+                    counter = counter + 1
+                    d = ts.strftime("%a %b %d") # Wed May 3
+                    title = '%s at %d:%02d' % (d, ts.hour, ts.minute)
+                    qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
                     if counter > 5:
                         break
                 print str(qr)
