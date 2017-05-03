@@ -1,13 +1,16 @@
 import os, requests, json
 
-def send_message(sender_id, message, quick_reply = None):
+def send_message(sender_id, message, quick_reply = None, buttons = None):
     post_msg_url = os.environ['FB_GRAPHAPI_URL']+'me/messages'
     resp_data = {
         "recipient":{"id":sender_id},
         "message":{"text":message}
     }
-    if quick_reply != None:
+    if quick_reply:
         resp_data["message"]["quick_replies"] = quick_reply
+    if buttons:
+        resp_data["message"]["buttons"] = buttons
+
     params = {'access_token': os.environ['FB_ACCESS_TOKEN']}
     res = requests.post(post_msg_url, params = params, json=resp_data)
     return res
