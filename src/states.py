@@ -110,7 +110,7 @@ class WAIT_FOR_ZIP(State):
                 self.update_order({'service_id':service_id})
                 self.update_order({'availabilities':availabilities})
                 for timeslot in availabilities.get('timeslots'):
-                    #ts = dateutil.parser.parse(timeslot.get('start'))
+                    ts = dateutil.parser.parse(timeslot.get('start'))
                     start_time = timeslot.get('start')
                     finish_time = timeslot.get('finish')
                     counter = counter + 1
