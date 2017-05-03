@@ -1,5 +1,5 @@
 import requests, json, os, re, dateutil.parser, datetime
-import fb, apiai, obe
+import apiai, obe
 from abc import ABCMeta, abstractmethod
 from messages import *
 from intents import *
@@ -30,7 +30,9 @@ class State(object):
     def responds_to_sender(self, sender_id, message, nlp_data):
         pass
 
-
+#####################
+# Persistent States #
+#####################
 class INIT(State):
     def responds_to_sender(self, sender_message, nlp_data):
         print 'INIT.responds_to_user'
@@ -45,10 +47,6 @@ class INIT(State):
         # 4. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
         return
-
-class ZIP_SUBMITTED(State):
-    def responds_to_sender(self, sender_message, nlp_data):
-        print 'DO NOTHING...'
 
 class WAIT_FOR_TIMESLOT(State):
     def responds_to_sender(self, sender_message, nlp_data):
@@ -76,7 +74,6 @@ class WAIT_FOR_ZIP(State):
             r = p.search(sender_message.upper())
             if r:
                 zipcode = r.group()
-
         # If zipcode extracted, send for verification
         # Else, propmpt for zipcode again.
         # ToDo: What about area not serviced?
@@ -103,7 +100,6 @@ class WAIT_FOR_ZIP(State):
                 print str(qr)
                 self.send_messages([SELECT_TIMESLOT], qr)
                 self.set_next_state('WAIT_FOR_TIMESLOT')
-
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
         elif zipcode:
@@ -118,7 +114,14 @@ class WAIT_FOR_ZIP(State):
             self.set_next_state('WAIT_FOR_ZIP') # stay in this state
         return
 
+    ####################
+    # Transient States #
+    ####################
 
+    class ZIP_SUBMITTED(State):
+        ''' Transient State  '''
+        def responds_to_sender(self, sender_message, nlp_data):
+            print 'DO NOTHING...'
 
 #################################
 # Get Instance of a STATE object
