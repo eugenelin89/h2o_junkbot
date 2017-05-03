@@ -84,7 +84,7 @@ class WAIT_FOR_ZIP(State):
         if zipcode and 'error' not in zip_verification.keys():
             # ZIPCODE VERIFIED
             franchise_id = zip_verification.get('franchise_id')
-            self.set_franchise(franchise_id)
+            #self.set_franchise(franchise_id)
             print 'ZIPCODE verified: '+zipcode
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
