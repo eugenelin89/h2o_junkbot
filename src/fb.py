@@ -12,6 +12,8 @@ def send_message(sender_id, message, quick_reply = None, buttons = None):
         resp_data["message"]["buttons"] = buttons
 
     params = {'access_token': os.environ['FB_ACCESS_TOKEN']}
+    print 'send following to Facebook: '
+    print json.dumps(resp_data, indent = 4)
     res = requests.post(post_msg_url, params = params, json=resp_data)
     return res
 
