@@ -4,4 +4,4 @@ PROMPT_ZIP_MESSAGE = 'To check the service availability in your area, please let
 UNVERFIABLE_ZIP = 'We are unable to verify the ZIP code you provided... Please give us a call and a live agent will be able to help you book the service.'
 MISSING_ZIP = 'Still waiting for ZIP code...'
 ZIP_RECEIVED = 'Thanks! Let me look for availability for %s... It\'ll take about 15 seconds (Sorry, it\'s Salesforce...) '
-SELECT_TIMESLOT = 'Available time for today:'
+SELECT_TIMESLOT = 'Availabilities:'
