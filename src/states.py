@@ -93,7 +93,7 @@ class WAIT_FOR_ZIP(State):
                     today = datetime.date.today()
                     counter = counter + 1
                     title = ts.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
-                    qr.append({'type':'text', 'title':title, 'payload':timeslot.get('start')})
+                    qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
                     if counter > 2:
                         break
                 print str(qr)
