@@ -94,7 +94,7 @@ class WAIT_FOR_ZIP(State):
                     counter = counter + 1
                     title = ts.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
                     qr.append({'type':'postback', 'title':title, 'payload':timeslot.get('start')})
-                    if counter > 5:
+                    if counter > 2:
                         break
                 print str(qr)
                 self.send_messages([SELECT_TIMESLOT], buttons=qr)
