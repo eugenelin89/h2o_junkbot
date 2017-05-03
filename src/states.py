@@ -134,10 +134,10 @@ def get_state(sender_id):
     url = os.environ['GET_STATE_URL']
     cur_state = requests.get(url, {'sender_id':sender_id}).json()
     state = None
+    print cur_state
     if cur_state == None or cur_state['state'] not in globals(): # user has not yet started
         state = INIT(sender_id)
     else:
-        print cur_state
         state_class = globals()[cur_state['state']]
         state = state_class(sender_id)
     return state
