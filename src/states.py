@@ -124,12 +124,6 @@ class WAIT_FOR_ZIP(State):
             self.set_next_state('WAIT_FOR_ZIP') # stay in this state
         return
 
-    def set_franchise_id(self, franchise_id):
-        url = os.environ['FRANCHISE_URL']
-        payload = {'franchise_id':franchise_id}
-        res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
-        return
-
 
 
 
