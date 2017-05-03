@@ -23,7 +23,7 @@ class State(object):
         payload = {'state':next_state}
         res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
         if res.status_code == requests.codes.ok:
-            apiai.set_context(self.sender_id, 'WAIT_FOR_ZIP')
+            apiai.set_context(self.sender_id, next_state)
         return
 
     def update_order(self, payload):
@@ -57,6 +57,8 @@ class INIT(State):
 class WAIT_FOR_TIMESLOT(State):
     def responds_to_sender(self, sender_message, nlp_data):
         self.set_next_state('TIMESLOT_SUBMITTED')
+        # if valid time, hold the time.
+
 
         pass
 
