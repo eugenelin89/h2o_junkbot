@@ -137,6 +137,7 @@ def get_state(sender_id):
     if cur_state == None or cur_state['state'] not in globals(): # user has not yet started
         state = INIT(sender_id)
     else:
+        print cur_state
         state_class = globals()[cur_state['state']]
         state = state_class(sender_id)
     return state
