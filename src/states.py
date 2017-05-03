@@ -26,6 +26,12 @@ class State(object):
             apiai.set_context(self.sender_id, 'WAIT_FOR_ZIP')
         return
 
+    def update_order(self, payload):
+        # sample payload: {'franchise_id':franchise_id}
+        url = os.environ['ORDER_URL']
+        res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
+        return
+
     @abstractmethod
     def responds_to_sender(self, sender_id, message, nlp_data):
         pass
@@ -84,7 +90,8 @@ class WAIT_FOR_ZIP(State):
         if zipcode and 'error' not in zip_verification.keys():
             # ZIPCODE VERIFIED
             franchise_id = zip_verification.get('franchise_id')
-            self.set_franchise_id(franchise_id)
+            #self.set_franchise_id(franchise_id)
+            self.update_order({'franchise_id':franchise_id})
             print 'ZIPCODE verified: '+zipcode
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
