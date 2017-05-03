@@ -84,7 +84,7 @@ class WAIT_FOR_ZIP(State):
         if zipcode and 'error' not in zip_verification.keys():
             # ZIPCODE VERIFIED
             franchise_id = zip_verification.get('franchise_id')
-            #self.set_franchise(franchise_id)
+            self.set_franchise_id(franchise_id)
             print 'ZIPCODE verified: '+zipcode
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
@@ -117,8 +117,8 @@ class WAIT_FOR_ZIP(State):
             self.set_next_state('WAIT_FOR_ZIP') # stay in this state
         return
 
-    def set_franchise(self, franchise_id):
-        url = os.environ['GET_STATE_URL']
+    def set_franchise_id(self, franchise_id):
+        url = os.environ['FRANCHISE_URL']
         payload = {'franchise_id':franchise_id}
         res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
         return
@@ -126,16 +126,16 @@ class WAIT_FOR_ZIP(State):
 
 
 
-    ####################
-    # Transient States #
-    ####################
+####################
+# Transient States #
+####################
 
-    class ZIP_SUBMITTED(State):
-        def responds_to_sender(self, sender_message, nlp_data):
-            pass
-    class TIMESLOT_SUBMITTED(State):
-        def responds_to_sender(self, sender_message, nlp_data):
-            pass
+class ZIP_SUBMITTED(State):
+    def responds_to_sender(self, sender_message, nlp_data):
+        pass
+class TIMESLOT_SUBMITTED(State):
+    def responds_to_sender(self, sender_message, nlp_data):
+        pass
 
 #################################
 # Get Instance of a STATE object
