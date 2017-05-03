@@ -33,14 +33,14 @@ class State(object):
         return
 
     @abstractmethod
-    def responds_to_sender(self, sender_id, message, nlp_data):
+    def responds_to_sender(self, sender_id, message, nlp_data, payload):
         pass
 
 #####################
 # Persistent States #
 #####################
 class INIT(State):
-    def responds_to_sender(self, sender_message, nlp_data):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
         print 'INIT.responds_to_user'
         # 1. If smalltalk avail, reply with smalltalk
         action = nlp_data.get('result').get('action')
@@ -55,7 +55,7 @@ class INIT(State):
         return
 
 class WAIT_FOR_TIMESLOT(State):
-    def responds_to_sender(self, sender_message, nlp_data):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('TIMESLOT_SUBMITTED')
         # if valid time, hold the time.
 
@@ -63,7 +63,7 @@ class WAIT_FOR_TIMESLOT(State):
         pass
 
 class WAIT_FOR_ZIP(State):
-    def responds_to_sender(self, sender_message, nlp_data):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('ZIP_SUBMITTED') # TRANSIENT STATE
         zipcode = ""
         intent = nlp_data.get('result').get('metadata').get('intentName')
@@ -136,10 +136,10 @@ class WAIT_FOR_ZIP(State):
 ####################
 
 class ZIP_SUBMITTED(State):
-    def responds_to_sender(self, sender_message, nlp_data):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
 class TIMESLOT_SUBMITTED(State):
-    def responds_to_sender(self, sender_message, nlp_data):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
 
 #################################

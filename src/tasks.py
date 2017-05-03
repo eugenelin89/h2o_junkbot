@@ -21,14 +21,12 @@ def fb_process(fb_data):
     print 'fb_process( %s )' % (json.dumps(fb_data, indent=4))
     if 'message' in fb_data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
         fb_sender_id = fb_data['entry'][0]['messaging'][0]['sender']['id']
-        fb_sender_message = fb_data['entry'][0]['messaging'][0]['message']['text']
+        #fb_sender_message = fb_data['entry'][0]['messaging'][0]['message']['text']
         fb_message_obj = fb_data['entry'][0]['messaging'][0]['message']
-        print 'fb_message_obj: '+ json.dumps(fb_message_obj, indent=4)
-        #fb_sender_message = fb_message_obj.get('message')
-        qr = fb_message_obj.get('quick_reply')
-        payload = None
-        if qr:
-            payload = qr.get('payload')
+        fb_sender_message = fb_message_obj.get('text')
+        payload = fb_message_obj.get('quick_reply')
+
+
         #fb_timestamp = fb_data['entry'][0]['time']
 
         apiai_data = apiai.query(fb_sender_id, fb_sender_message)
@@ -38,7 +36,7 @@ def fb_process(fb_data):
         # apiai_fulfillment_msg = apiai_data.get("result").get("fulfillment").get("speech")
         print 'API.AI Query Result: %s' % (json.dumps(apiai_data, indent = 4))
         state = states.get_state(fb_sender_id)
-        state.responds_to_sender(fb_sender_message, apiai_data)
+        state.responds_to_sender(fb_sender_message, apiai_data, payload = payload)
     return
 
 @app.task
