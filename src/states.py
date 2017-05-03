@@ -90,15 +90,16 @@ class WAIT_FOR_ZIP(State):
         if zipcode and 'error' not in zip_verification.keys():
             # ZIPCODE VERIFIED
             franchise_id = zip_verification.get('franchise_id')
-            #self.set_franchise_id(franchise_id)
             self.update_order({'franchise_id':franchise_id})
-            print 'ZIPCODE verified: '+zipcode
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
             availabilities = my_obe.get_availabilities()
             qr = []
             if 'error' not in availabilities.keys():
                 counter = 0
+                service_id = availabilities.get('serviceId')
+                self.update_order({'service_id':service_id})
+
                 for timeslot in availabilities.get('timeslots'):
                     ts = dateutil.parser.parse(timeslot.get('start'))
                     today = datetime.date.today()
