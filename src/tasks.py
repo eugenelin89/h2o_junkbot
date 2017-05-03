@@ -21,7 +21,13 @@ def fb_process(fb_data):
     print 'fb_process( %s )' % (json.dumps(fb_data, indent=4))
     if 'message' in fb_data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
         fb_sender_id = fb_data['entry'][0]['messaging'][0]['sender']['id']
-        fb_sender_message = fb_data['entry'][0]['messaging'][0]['message']['text']
+        #fb_sender_message = fb_data['entry'][0]['messaging'][0]['message']['text']
+        fb_message_obj = fb_data['entry'][0]['messaging'][0]['message']
+        fb_sender_message = fb_message_obj.get('message')
+        qr = fb_message_obj.get('quick_reply')
+        payload = None
+        if qr:
+            payload = qr.get('payload')
         #fb_timestamp = fb_data['entry'][0]['time']
 
         apiai_data = apiai.query(fb_sender_id, fb_sender_message)
