@@ -22,8 +22,9 @@ def fb_process(fb_data):
     if 'message' in fb_data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
         fb_sender_id = fb_data['entry'][0]['messaging'][0]['sender']['id']
         fb_sender_message = fb_data['entry'][0]['messaging'][0]['message']['text']
-        #fb_message_obj = fb_data['entry'][0]['messaging'][0]['message']
-        fb_sender_message = fb_message_obj.get('message')
+        fb_message_obj = fb_data['entry'][0]['messaging'][0]['message']
+        print 'fb_message_obj: '+ json.dumps(fb_message_obj, indent=4)
+        #fb_sender_message = fb_message_obj.get('message')
         qr = fb_message_obj.get('quick_reply')
         payload = None
         if qr:
