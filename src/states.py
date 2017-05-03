@@ -58,7 +58,7 @@ class WAIT_FOR_TIMESLOT(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('TIMESLOT_SUBMITTED')
         if payload:
-            print json.dumpd(payload, indent=4)
+            print json.dumps(payload, indent=4)
         # if valid time, hold the time.
 
 
