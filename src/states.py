@@ -58,7 +58,11 @@ class WAIT_FOR_TIMESLOT(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('TIMESLOT_SUBMITTED')
         if payload:
-            print json.dumps(payload, indent=4)
+            # Sender clicked on quick_reply. We can trust and use directly.
+            # example {"payload": "2017-05-03T16:00:00.000Z"}
+            pass
+        else:
+            pass
         # if valid time, hold the time.
 
 
@@ -104,10 +108,11 @@ class WAIT_FOR_ZIP(State):
                 counter = 0
                 service_id = availabilities.get('serviceId')
                 self.update_order({'service_id':service_id})
-
+                self.update_order({'availabilities':availabilities})
                 for timeslot in availabilities.get('timeslots'):
-                    ts = dateutil.parser.parse(timeslot.get('start'))
-                    today = datetime.date.today()
+                    #ts = dateutil.parser.parse(timeslot.get('start'))
+                    start_time = timeslot.get('start')
+                    finish_time = timeslot.get('finish')
                     counter = counter + 1
                     title = ts.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
                     qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
