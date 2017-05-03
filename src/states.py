@@ -91,6 +91,7 @@ class WAIT_FOR_ZIP(State):
             # ZIPCODE VERIFIED
             franchise_id = zip_verification.get('franchise_id')
             self.update_order({'franchise_id':franchise_id})
+            self.update_order({'zip':zipcode})
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
             availabilities = my_obe.get_availabilities()
