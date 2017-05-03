@@ -11,10 +11,10 @@ class State(object):
         self.sender_id = sender_id
         pass
 
-    def send_messages(self, response_messages, quick_reply = None):
+    def send_messages(self, response_messages, quick_reply = None, buttons = None):
         ''' takes a list of messages and will send in order '''
         for message in response_messages:
-            fb.send_message(self.sender_id, message, quick_reply)
+            fb.send_message(self.sender_id, message, quick_reply = quickreply, buttons = buttons)
         return
 
     def set_next_state(self, next_state):
