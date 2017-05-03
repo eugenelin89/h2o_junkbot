@@ -107,7 +107,7 @@ class WAIT_FOR_ZIP(State):
             if 'error' not in availabilities.keys():
                 counter = 0
                 service_id = availabilities.get('serviceId')
-                self.update_order({'service_id':service_id})
+                #self.update_order({'service_id':service_id})
                 self.update_order({'availabilities':availabilities})
                 for timeslot in availabilities.get('timeslots'):
                     ts = dateutil.parser.parse(timeslot.get('start'))
