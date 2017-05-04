@@ -56,7 +56,7 @@ class INIT(State):
         result = self.set_next_state('WAIT_FOR_ZIP')
         return
 ################################################################################
-class RESET(State)
+class RESET(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         # DELETE order for sender_id
         url = os.environ['ORDER_URL']
