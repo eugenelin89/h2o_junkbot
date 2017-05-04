@@ -95,21 +95,28 @@ class WAIT_FOR_TIMESLOT(State):
         # By getting to here, we have a timeslot string.
         # Check this to be an available timeslot from Firebase
         availabilities = self.__get_availabilities().get("timeslots")
-        # array of start times in datetime.datetime
+        # list of start times in datetime.datetime
         starts = [dateutil.parser.parse(availabilities[i].get('start')) for i in range(len(availabilities)) ]
-        print str(starts)
-        needle = dateutil.parser.parse(timeslot)
+        timeslot_datetime = dateutil.parser.parse(timeslot)
         # position of timeslot if found, else index of first time slot that is larger
-        pos = bisect.bisect_left(starts, needle)
+        pos = bisect.bisect_left(starts, timeslot_datetime)
         print 'position '+ str(pos)
         if pos >= len(starts): # sender seleted time bigger than all starting time. So we list backwards
-            print 'REVERSE'
             starts = starts[len(starts)::-1]
         else: # include only times bigger or equal to sender selected time.
-            print 'FORWARD'
             starts = starts[pos:]
-        print str(starts)
 
+        if starts[0] and starts[0] == timeslot_datetime:
+            # user selected available timeslot, hold the time
+            # if hold is successful, go to next state.
+            # if hold is unsuccessful, ask user to call in and set back to INIT state
+            # pos still holds the index of the *original* starts which is in same order as availabilities
+            start_time = availabilities.get('start')
+            finish_time = availabilities[pos].get('finish')
+            print 'start: '+start_time+' finish: '+finish_time
+        else:
+            # send the next few available times, prompt user again, and loop back to this state
+            pass
 
 
     def __get_timeslot(datetime_str):
