@@ -78,6 +78,7 @@ class WAIT_FOR_TIMESLOT(State):
 
                 # Todo: 1. format above to the accepted datetime string
                 datetime_str = self.__datetime_string(date_string, time_string)
+                print 'DATETIME STRING: '+datetime_str
                 # Todo: 2. Check this to be an available timeslot from Firebase
 
                 # Todo: 3. If available, assign timeslot to the value. Else, msg sender for time unavailable.
