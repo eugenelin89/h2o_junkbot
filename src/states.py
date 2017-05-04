@@ -58,7 +58,8 @@ class INIT(State):
 
 ################################################################################
 class WAIT_FOR_DETAIL(State):
-    pass
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
 
 ################################################################################
 class WAIT_FOR_TIMESLOT(State):
@@ -137,7 +138,8 @@ class WAIT_FOR_TIMESLOT(State):
                 self.send_messages([HOLD_TIME_FAILED])
                 self.set_next_state('INIT')
         else:
-            # ToDo: send the next few available times, prompt user again, and loop back to this state
+            # Sender selected a time not in the available timeslots.
+            # ToDo: Refactor the following code for reuse
             qr = []
             counter = 0
             for start_time in starts:
