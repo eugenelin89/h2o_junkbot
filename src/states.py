@@ -1,4 +1,4 @@
-import requests, json, os, re, dateutil.parser, datetime
+import requests, json, os, re, dateutil.parser, datetime, pytz
 import apiai, obe
 from abc import ABCMeta, abstractmethod
 from messages import *
@@ -11,7 +11,6 @@ class State(object):
 
     def __init__(self, sender_id):
         self.sender_id = sender_id
-        pass
 
     def send_messages(self, response_messages, quick_reply = None, buttons = None):
         ''' takes a list of messages and will send in order '''
@@ -41,6 +40,7 @@ class State(object):
 #####################
 # Persistent States #
 #####################
+################################################################################
 class INIT(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         print 'INIT.responds_to_user'
@@ -56,7 +56,12 @@ class INIT(State):
         result = self.set_next_state('WAIT_FOR_ZIP')
         return
 
+################################################################################
 class WAIT_FOR_TIMESLOT(State):
+    def __init__(self, sender_id):
+        super(WAIT_FOR_TIMESLOT, self).__init__(sender_id)
+        self.availabilities = None
+
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('TIMESLOT_SUBMITTED')
         timeslot = None
@@ -64,14 +69,16 @@ class WAIT_FOR_TIMESLOT(State):
             # Sender clicked on quick_reply. We can trust and use directly.
             # example {"payload": "2017-05-03T16:00:00.000Z"}
             timeslot = payload.get('payload')
-            pass
         else:
             # Parse sender's input
             intent = nlp_data.get('result').get('metadata').get('intentName')
             if intent == TIMESLOT_INTENT:
                 date_string = nlp_data.get('result').get('parameters').get('date')
                 time_string = nlp_data.get('result').get('parameters').get('time')
+
                 # Todo: 1. format above to the accepted datetime string
+                datetime_str = self.__datetime_string(date_string, time_string)
+                print 'DATE_TIME_STR ' + datetime_str
                 # Todo: 2. Check this to be an available timeslot from Firebase
                 # Todo: 3. If available, assign timeslot to the value. Else, msg sender for time unavailable.
             elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
@@ -85,7 +92,37 @@ class WAIT_FOR_TIMESLOT(State):
 
         # if valid time, hold the time.
 
+    def __datetime_string(date_string, time_string):
+        result = ""
+        # date_string: "2017-05-05" Missing string means today.
+        # time_sring: "16:00:00"
+        # our datetime string looks like: 2017-05-06T16:30:00.000Z
+        # Note: Interpretation of today/tomorrow etc appear based on Eastern time
+        # Tricky thing is that when sender types in a time he intends local time.
+        # Lets forget about timezone for now...
+        if not date_string:
+            timezone = self.__get_availabilities().get("time_zone")
+            tz = pytz.timezone(timezone)
+            date_string = str(datetime.datetime.now(tz).date())
+        if not time_string:
+            # NOT suppose to happen...
+            time_string = '00:00:00'
+        return '%sT%s.00Z' % (date_string, time_string)
 
+
+
+
+
+            # curdate based on timezone.
+        return result
+
+    def __get_availabilities():
+        if not self.availabilities:
+            self.availabilities = requests.get(os.environ['GET_AVAIL_URL'], {'sender_id':self.sender_id}).json()
+        return self.availabilities
+
+
+################################################################################
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('ZIP_SUBMITTED') # TRANSIENT STATE
@@ -159,10 +196,12 @@ class WAIT_FOR_ZIP(State):
 ####################
 # Transient States #
 ####################
-
+################################################################################
 class ZIP_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
+
+################################################################################
 class TIMESLOT_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
@@ -170,6 +209,7 @@ class TIMESLOT_SUBMITTED(State):
 #################################
 # Get Instance of a STATE object
 #################################
+################################################################################
 def get_state(sender_id):
     url = os.environ['GET_STATE_URL']
     cur_state = requests.get(url, {'sender_id':sender_id}).json()
