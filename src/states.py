@@ -89,6 +89,7 @@ class WAIT_FOR_TIMESLOT(State):
             # Todo: 1. Get the available selection from Firebase.
             # Todo: 2. Request again with the available timeslots in step 1.
             qr = []
+            counter = 0
             for timeslot in self.__get_availabilities().get("timeslots"):
                 ts = dateutil.parser.parse(timeslot.get('start'))
                 start_time = timeslot.get('start')
