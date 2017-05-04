@@ -78,8 +78,8 @@ class WAIT_FOR_TIMESLOT(State):
 
                 # Todo: 1. format above to the accepted datetime string
                 datetime_str = self.__datetime_string(date_string, time_string)
-                print 'DATE_TIME_STR ' + datetime_str
                 # Todo: 2. Check this to be an available timeslot from Firebase
+
                 # Todo: 3. If available, assign timeslot to the value. Else, msg sender for time unavailable.
             elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
                 # small talk back
@@ -93,7 +93,6 @@ class WAIT_FOR_TIMESLOT(State):
         # if valid time, hold the time.
 
     def __datetime_string(self, date_string, time_string):
-        result = ""
         # date_string: "2017-05-05" Missing string means today.
         # time_sring: "16:00:00"
         # our datetime string looks like: 2017-05-06T16:30:00.000Z
@@ -109,12 +108,6 @@ class WAIT_FOR_TIMESLOT(State):
             time_string = '00:00:00'
         return '%sT%s.00Z' % (date_string, time_string)
 
-
-
-
-
-            # curdate based on timezone.
-        return result
 
     def __get_availabilities(self):
         if not self.availabilities:
