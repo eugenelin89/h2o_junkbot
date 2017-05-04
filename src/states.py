@@ -55,6 +55,14 @@ class INIT(State):
         # 4. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
         return
+################################################################################
+class RESET(State)
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        # DELETE order for sender_id
+        url = os.environ['ORDER_URL']
+        res = requests.delete(url, params = {'sender_id':self.sender_id})
+        self.set_next_state('INIT')
+
 
 ################################################################################
 class WAIT_FOR_DETAIL(State):
@@ -131,7 +139,8 @@ class WAIT_FOR_TIMESLOT(State):
                 # prompt for details PROMPT_DETAIL_MESSAGE
                 self.send_messages([PROMPT_DETAIL_MESSAGE])
                 # go to next state
-                self.set_next_state('WAIT_FOR_DETAIL')
+                #self.set_next_state('WAIT_FOR_DETAIL')
+                self.set_next_state('RESET') # FOR DEBUGGING !!!
             else:
                 # Something went wrong... Prompt user to call sales centre.
                 # Set next state back to INIT
@@ -150,7 +159,6 @@ class WAIT_FOR_TIMESLOT(State):
                     break
             self.send_messages([MORE_TIMESLOT], quick_reply=qr)
             self.set_next_state('WAIT_FOR_TIMESLOT')
-            pass
 
 
     def __get_timeslot(datetime_str):
