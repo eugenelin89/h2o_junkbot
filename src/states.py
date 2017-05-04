@@ -4,6 +4,8 @@ from abc import ABCMeta, abstractmethod
 from messages import *
 from intents import *
 
+MAX_TIME_SELECTIONS = 5
+
 class State(object):
     __metaclass__ = ABCMeta
 
@@ -57,16 +59,27 @@ class INIT(State):
 class WAIT_FOR_TIMESLOT(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('TIMESLOT_SUBMITTED')
+        timeslot = None
         if payload:
             # Sender clicked on quick_reply. We can trust and use directly.
             # example {"payload": "2017-05-03T16:00:00.000Z"}
+            timeslot = payload.get('payload')
             pass
         else:
-            pass
+            # Parse sender's input
+            intent = nlp_data.get('result').get('metadata').get('intentName')
+            if intent == TIMESLOT_INTENT:
+                date_string = nlp_data.get('result').get('parameters').get('date')
+                time_string = nlp_data.get('result').get('parameters').get('time')
+                # format above to the accepted datetime string
+            elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
+                # Get the available selection from Firebase.
+                # small talk back
+                self.send_messages([nlp_data.get("result").get("fulfillment").get("speech")])
+                # prompt for time again
+
         # if valid time, hold the time.
 
-
-        pass
 
 class WAIT_FOR_ZIP(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
@@ -116,7 +129,7 @@ class WAIT_FOR_ZIP(State):
                     counter = counter + 1
                     title = ts.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
                     qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
-                    if counter > 2:
+                    if counter > MAX_TIME_SELECTIONS-1:
                         break
                 print str(qr)
                 self.send_messages([SELECT_TIMESLOT], quick_reply=qr)
