@@ -76,13 +76,10 @@ class WAIT_FOR_TIMESLOT(State):
                 date_string = nlp_data.get('result').get('parameters').get('date')
                 time_string = nlp_data.get('result').get('parameters').get('time')
 
-                # Todo: 1. format above to the accepted datetime string
-                datetime_str = self.__datetime_string(date_string, time_string)
-                print 'DATETIME STRING: '+datetime_str
-                # Todo: 2. Check this to be an available timeslot from Firebase
-                timeslots = self.__get_availabilities().get("timeslots")
-                startslots = [timeslots[i].get('start') for i in range(len(timeslots)) ]
-                print str(startslots)
+                # format above to the accepted datetime string
+                timeslot = self.__datetime_string(date_string, time_string)
+                print 'DATETIME STRING: '+timeslot
+
 
 
                 # Todo: 3. If available, assign timeslot to the value. Else, msg sender for time unavailable.
@@ -93,9 +90,14 @@ class WAIT_FOR_TIMESLOT(State):
         if timeslot == None:
             # Todo: 1. Get the available selection from Firebase.
             # Todo: 2. Request again with the available timeslots in step 1.
-            pass
+            return
 
-        # if valid time, hold the time.
+        # By getting to here, we have a timeslot string.
+        # Check this to be an available timeslot from Firebase
+        timeslots = self.__get_availabilities().get("timeslots")
+        # array of start times in the format '2017-05-04T12:30:00.000Z'
+        starts = [dateutil.parser.parse(timeslots[i].get('start')) for i in range(len(timeslots)) ]
+        print str(starts)
 
     def __get_timeslot(datetime_str):
         pass
