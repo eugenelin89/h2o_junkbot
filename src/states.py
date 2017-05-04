@@ -57,6 +57,10 @@ class INIT(State):
         return
 
 ################################################################################
+class WAIT_FOR_DETAIL(State):
+    pass
+
+################################################################################
 class WAIT_FOR_TIMESLOT(State):
     def __init__(self, sender_id):
         super(WAIT_FOR_TIMESLOT, self).__init__(sender_id)
@@ -75,14 +79,8 @@ class WAIT_FOR_TIMESLOT(State):
             if intent == TIMESLOT_INTENT:
                 date_string = nlp_data.get('result').get('parameters').get('date')
                 time_string = nlp_data.get('result').get('parameters').get('time')
-
                 # format above to the accepted datetime string
                 timeslot = self.__datetime_string(date_string, time_string)
-                print 'DATETIME STRING: '+timeslot
-
-
-
-                # Todo: 3. If available, assign timeslot to the value. Else, msg sender for time unavailable.
             elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
                 # small talk back
                 self.send_messages([nlp_data.get("result").get("fulfillment").get("speech")])
@@ -91,7 +89,6 @@ class WAIT_FOR_TIMESLOT(State):
             # Todo: 1. Get the available selection from Firebase.
             # Todo: 2. Request again with the available timeslots in step 1.
             return
-
         # By getting to here, we have a timeslot string.
         # Check this to be an available timeslot from Firebase
         availabilities = self.__get_availabilities().get("timeslots")
@@ -105,7 +102,6 @@ class WAIT_FOR_TIMESLOT(State):
             starts = starts[len(starts)::-1]
         else: # include only times bigger or equal to sender selected time.
             starts = starts[pos:]
-
         if starts[0] and starts[0] == timeslot_datetime:
             # user selected available timeslot, hold the time
             # if hold is successful, go to next state.
@@ -113,7 +109,20 @@ class WAIT_FOR_TIMESLOT(State):
             # pos still holds the index of the *original* starts which is in same order as availabilities
             start_time = availabilities[pos].get('start')
             finish_time = availabilities[pos].get('finish')
+            service_id = timezone = self.__get_availabilities().get("serviceId")
             print 'start: '+start_time+' finish: '+finish_time
+            my_obe = obe.OBE()
+            is_time_held = my_obe.hold_timeslot(service_id, start_time, finish_time)
+            if is_time_held:
+                # prompt for details PROMPT_DETAIL_MESSAGE
+                self.send_messages([PROMPT_DETAIL_MESSAGE])
+                # go to next state
+                self.set_next_state('WAIT_FOR_DETAIL')
+            else:
+                # Something went wrong... Prompt user to call sales centre.
+                # Set next state back to INIT
+                self.send_messages([HOLD_TIME_FAILED])
+                self.set_next_state('INIT')
         else:
             # send the next few available times, prompt user again, and loop back to this state
             pass

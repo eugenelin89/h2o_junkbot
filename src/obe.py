@@ -64,10 +64,27 @@ class OBE(object):
             print 'error occurred in get_availabilities: '+res.text
             return {'error':res.text}
 
-    def hold_timeslot(self, start_time, finish_time):
+    def hold_timeslot(self, service_id, start_time, finish_time):
         print 'hold_timeslot(%s %s)'%(start_time, finish_time)
         if not self.__authenticate():
             return {'error':'OBE Authentication error'}
+        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_HOLD_SLOT']
+        headers = {
+            "Authorization":'Bearer '+self.access_token
+        }
+        data = {
+            'service_id' : start_time,
+            'start_date_time' : start_time,
+            'finish_date_time' : finish_time,
+        }
+        res = requests.post(url, json = data, headers = headers)
+        if res.status_code == requests.codes.ok:
+            print 'Hold time successful: ' + print res.text
+            return True
+        else:
+            print 'Failed to hold time: ' + print res.text
+            return False
+
 
 
     def __authenticate(self):
