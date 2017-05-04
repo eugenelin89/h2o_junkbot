@@ -43,6 +43,7 @@ class State(object):
 ################################################################################
 class INIT(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        # ToDo: time stamp
         print 'INIT.responds_to_user'
         # 1. If smalltalk avail, reply with smalltalk
         action = nlp_data.get('result').get('action')
@@ -276,6 +277,9 @@ class TIMESLOT_SUBMITTED(State):
 #################################
 ################################################################################
 def get_state(sender_id):
+    # ToDo: If timestamp is over x minutes ago, regardless state,
+    # re-start from INIT
+    
     url = os.environ['GET_STATE_URL']
     cur_state = requests.get(url, {'sender_id':sender_id}).json()
     state = None
