@@ -65,7 +65,7 @@ class OBE(object):
             return {'error':res.text}
 
     def hold_timeslot(self, service_id, start_time, finish_time):
-        print 'hold_timeslot(%s %s)'%(start_time, finish_time)
+        print 'hold_timeslot(%s, %s %s)'%(service_id, start_time, finish_time)
         if not self.__authenticate():
             return {'error':'OBE Authentication error'}
         url = self.instance_url + os.environ['OBE_RESOURCE_PATH_HOLD_SLOT']
@@ -82,7 +82,7 @@ class OBE(object):
             print 'Hold time successful '
             return True
         else:
-            print 'Failed to hold time '
+            print 'Failed to hold time ' + str(res.status_code)
             return False
 
 
