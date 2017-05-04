@@ -103,10 +103,10 @@ class WAIT_FOR_TIMESLOT(State):
         pos = bisect.bisect_left(availabilities, needle)
         if pos > len(starts): # sender seleted time bigger than all starting time. So we list backwards
             starts = starts[len(starts)::-1]
-        else # include only times bigger or equal to sender selected time.
+        else: # include only times bigger or equal to sender selected time.
             starts = starts[pos:]
         print str(starts)
-        
+
 
 
     def __get_timeslot(datetime_str):
