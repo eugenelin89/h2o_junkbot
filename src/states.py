@@ -1,4 +1,4 @@
-import requests, json, os, re, dateutil.parser, datetime, pytz
+import requests, json, os, re, dateutil.parser, datetime, pytz, bisect
 import apiai, obe
 from abc import ABCMeta, abstractmethod
 from messages import *
@@ -94,10 +94,15 @@ class WAIT_FOR_TIMESLOT(State):
 
         # By getting to here, we have a timeslot string.
         # Check this to be an available timeslot from Firebase
-        timeslots = self.__get_availabilities().get("timeslots")
-        # array of start times in the format '2017-05-04T12:30:00.000Z'
-        starts = [dateutil.parser.parse(timeslots[i].get('start')) for i in range(len(timeslots)) ]
+        availabilities = self.__get_availabilities().get("timeslots")
+        # array of start times in datetime.datetime
+        starts = [dateutil.parser.parse(availabilities[i].get('start')) for i in range(len(availabilities)) ]
         print str(starts)
+        needle = dateutil.parser.parse(timeslot)
+        pos = bisect.bisect_left(availabilities, needle) # will return index if found, else index of first later times
+        starts = starts[pos:]
+        print str(starts)
+        
 
     def __get_timeslot(datetime_str):
         pass
