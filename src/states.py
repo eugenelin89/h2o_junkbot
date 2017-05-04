@@ -99,7 +99,7 @@ class WAIT_FOR_TIMESLOT(State):
                 qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
                 if counter > MAX_TIME_SELECTIONS-1:
                     break
-            self.send_messages([SELECT_TIMESLOT], quick_reply=qr)
+            self.send_messages([REPEAT_TIMESLOT], quick_reply=qr)
             self.set_next_state('WAIT_FOR_TIMESLOT')
             return
         # By getting to here, we have a timeslot string.

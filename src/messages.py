@@ -5,6 +5,7 @@ UNVERFIABLE_ZIP = 'We are unable to verify the ZIP code you provided... Please g
 MISSING_ZIP = 'Still waiting for ZIP code...'
 ZIP_RECEIVED = 'Thanks! Let me look for availability for %s... It\'ll take about 15 seconds (Sorry, it\'s Salesforce...) '
 SELECT_TIMESLOT = 'Availabilities:'
+REPEAT_TIMESLOT = 'I\'m still waiting for your selection...'
 MISSING_TIMESLOT = 'Still waiting for your selection...'
 PROMPT_DETAIL_MESSAGE = 'Please give us some description of items to be picked up...'
 HOLD_TIME_FAILED = 'We are unable to book the selected time... Please give us a call and a live agent will be able to help you book the service.'
