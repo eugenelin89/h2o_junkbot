@@ -111,7 +111,7 @@ class WAIT_FOR_TIMESLOT(State):
             # if hold is successful, go to next state.
             # if hold is unsuccessful, ask user to call in and set back to INIT state
             # pos still holds the index of the *original* starts which is in same order as availabilities
-            start_time = availabilities.get('start')
+            start_time = availabilities[pos].get('start')
             finish_time = availabilities[pos].get('finish')
             print 'start: '+start_time+' finish: '+finish_time
         else:
