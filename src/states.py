@@ -102,13 +102,13 @@ class WAIT_FOR_TIMESLOT(State):
         # position of timeslot if found, else index of first time slot that is larger
         pos = bisect.bisect_left(starts, needle)
         print 'position '+ str(pos)
-        if pos > len(starts): # sender seleted time bigger than all starting time. So we list backwards
+        if pos >= len(starts): # sender seleted time bigger than all starting time. So we list backwards
             print 'REVERSE'
             starts = starts[len(starts)::-1]
         else: # include only times bigger or equal to sender selected time.
             print 'FORWARD'
             starts = starts[pos:]
-        #print str(starts)
+        print str(starts)
 
 
 
