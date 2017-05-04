@@ -140,11 +140,10 @@ class WAIT_FOR_TIMESLOT(State):
             # ToDo: send the next few available times, prompt user again, and loop back to this state
             qr = []
             counter = 0
-            for str_start_time in starts:
-                ts = dateutil.parser.parse(str_start_time)
+            for start_time in starts:
                 counter = counter + 1
-                title = ts.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
-                qr.append({'content_type':'text', 'title':title, 'payload':str_start_time})
+                title = start_time.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
+                qr.append({'content_type':'text', 'title':title, 'payload':start_time.isoformat()})
                 if counter > MAX_TIME_SELECTIONS-1:
                     break
             self.send_messages([MORE_TIMESLOT], quick_reply=qr)
