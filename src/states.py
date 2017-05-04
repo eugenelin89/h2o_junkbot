@@ -88,6 +88,18 @@ class WAIT_FOR_TIMESLOT(State):
         if timeslot == None:
             # Todo: 1. Get the available selection from Firebase.
             # Todo: 2. Request again with the available timeslots in step 1.
+            qr = []
+            for timeslot in self.__get_availabilities().get("timeslots"):
+                ts = dateutil.parser.parse(timeslot.get('start'))
+                start_time = timeslot.get('start')
+                finish_time = timeslot.get('finish')
+                counter = counter + 1
+                title = ts.strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
+                qr.append({'content_type':'text', 'title':title, 'payload':timeslot.get('start')})
+                if counter > MAX_TIME_SELECTIONS-1:
+                    break
+            self.send_messages([SELECT_TIMESLOT], quick_reply=qr)
+            self.set_next_state('WAIT_FOR_TIMESLOT')
             return
         # By getting to here, we have a timeslot string.
         # Check this to be an available timeslot from Firebase
@@ -124,7 +136,7 @@ class WAIT_FOR_TIMESLOT(State):
                 self.send_messages([HOLD_TIME_FAILED])
                 self.set_next_state('INIT')
         else:
-            # send the next few available times, prompt user again, and loop back to this state
+            # ToDo: send the next few available times, prompt user again, and loop back to this state
             pass
 
 
