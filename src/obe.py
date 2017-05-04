@@ -78,7 +78,7 @@ class OBE(object):
             'finish_date_time' : finish_time,
         }
         res = requests.post(url, json = data, headers = headers)
-        if res.status_code == requests.codes.ok and res.text == 'true':
+        if res.status_code == requests.codes.ok and res.text.find('true') >= 0:
             print 'Hold time successful '
             return True
         else:
