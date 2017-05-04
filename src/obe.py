@@ -73,12 +73,12 @@ class OBE(object):
             "Authorization":'Bearer '+self.access_token
         }
         data = {
-            'service_id' : start_time,
+            'service_id' : service_id,
             'start_date_time' : start_time,
             'finish_date_time' : finish_time,
         }
         res = requests.post(url, json = data, headers = headers)
-        if res.status_code == requests.codes.ok:
+        if res.status_code == requests.codes.ok and res.text == 'true':
             print 'Hold time successful '
             return True
         else:
