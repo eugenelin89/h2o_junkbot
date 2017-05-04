@@ -79,10 +79,10 @@ class OBE(object):
         }
         res = requests.post(url, json = data, headers = headers)
         if res.status_code == requests.codes.ok:
-            print 'Hold time successful: ' + print res.text
+            print 'Hold time successful '
             return True
         else:
-            print 'Failed to hold time: ' + print res.text
+            print 'Failed to hold time '
             return False
 
 
