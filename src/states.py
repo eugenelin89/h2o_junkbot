@@ -71,12 +71,17 @@ class WAIT_FOR_TIMESLOT(State):
             if intent == TIMESLOT_INTENT:
                 date_string = nlp_data.get('result').get('parameters').get('date')
                 time_string = nlp_data.get('result').get('parameters').get('time')
-                # format above to the accepted datetime string
+                # Todo: 1. format above to the accepted datetime string
+                # Todo: 2. Check this to be an available timeslot from Firebase
+                # Todo: 3. If available, assign timeslot to the value. Else, msg sender for time unavailable.
             elif nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
-                # Get the available selection from Firebase.
                 # small talk back
                 self.send_messages([nlp_data.get("result").get("fulfillment").get("speech")])
-                # prompt for time again
+        # timeslot still None, that means we didn't get timeslot from user.
+        if timeslot == None:
+            # Todo: 1. Get the available selection from Firebase.
+            # Todo: 2. Request again with the available timeslots in step 1.
+            pass
 
         # if valid time, hold the time.
 
