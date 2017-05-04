@@ -82,7 +82,7 @@ class OBE(object):
             print 'Hold time successful '
             return True
         else:
-            print 'Failed to hold time ' + str(res.status_code)
+            print 'Failed to hold time ' + str(res.status_code) + ': '+res.text
             return False
 
 
