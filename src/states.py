@@ -92,7 +92,7 @@ class WAIT_FOR_TIMESLOT(State):
 
         # if valid time, hold the time.
 
-    def __datetime_string(date_string, time_string):
+    def __datetime_string(self, date_string, time_string):
         result = ""
         # date_string: "2017-05-05" Missing string means today.
         # time_sring: "16:00:00"
@@ -116,7 +116,7 @@ class WAIT_FOR_TIMESLOT(State):
             # curdate based on timezone.
         return result
 
-    def __get_availabilities():
+    def __get_availabilities(self):
         if not self.availabilities:
             self.availabilities = requests.get(os.environ['GET_AVAIL_URL'], {'sender_id':self.sender_id}).json()
         return self.availabilities
