@@ -76,6 +76,7 @@ class WAIT_FOR_DETAIL(State):
         # Anything senders sent will be recorded.
         if intent == DETAIL_DONE_INTENT:
             # move to the next intent
+            print 'OK, FINISHED GETTING DETAILS!'
             self.set_next_state('WAIT_FOR_ADDRESS')
             return
         # Get current detail and add onto it
