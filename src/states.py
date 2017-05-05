@@ -83,7 +83,7 @@ class WAIT_FOR_DETAIL(State):
         detail = requests.get(url, {'sender_id':self.sender_id}).json()
         if not detail:
             detail = sender_message
-        else
+        else:
             detail = detail + '\n' + sender_message
         # save it.
         payload = {'detail':detail}
