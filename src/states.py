@@ -70,8 +70,7 @@ class WAIT_FOR_DETAIL(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('DETAIL_SUBMITTED')
 
-        qr = [{'content_type':'text', 'title':DONE, 'payload':DONE}]
-        self.send_messages([ASK_IF_DONE_DETAILS], quick_reply = qr)
+
         intent = nlp_data.get('result').get('metadata').get('intentName')
         # Anything senders sent will be recorded.
         if intent == DETAIL_DONE_INTENT:
@@ -79,6 +78,8 @@ class WAIT_FOR_DETAIL(State):
             print 'OK, FINISHED GETTING DETAILS!'
             self.set_next_state('WAIT_FOR_ADDRESS')
             return
+        qr = [{'content_type':'text', 'title':DONE, 'payload':DONE}]
+        self.send_messages([ASK_IF_DONE_DETAILS], quick_reply = qr)
         # Get current detail and add onto it
         url = os.environ['DETAIL_URL']
         detail = requests.get(url, {'sender_id':self.sender_id}).json()
