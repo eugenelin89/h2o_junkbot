@@ -295,6 +295,11 @@ class TIMESLOT_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
 
+################################################################################
+class DETAIL_SUBMITTED(State):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
 #################################
 # Get Instance of a STATE object
 #################################
