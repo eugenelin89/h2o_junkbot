@@ -68,7 +68,28 @@ class RESET(State):
 ################################################################################
 class WAIT_FOR_DETAIL(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
-        pass
+        self.set_next_state('DETAIL_SUBMITTED')
+
+        qr = [{'content_type':'text', 'title':DONE, 'payload':DONE}]
+        self.send_messages([ASK_IF_DONE_DETAILS], quick_reply = qr)
+        intent = nlp_data.get('result').get('metadata').get('intentName')
+        # Anything senders sent will be recorded.
+        if intent == DETAIL_DONE_INTENT:
+            # move to the next intent
+            self.set_next_state('WAIT_FOR_ADDRESS')
+            return
+        # Get current detail and add onto it
+        url = os.environ['DETAIL_URL']
+        detail = requests.get(url, {'sender_id':self.sender_id}).json()
+        if not detail:
+            detail = sender_message
+        else
+            detail = detail + '\n' + sender_message
+        # save it.
+        payload = {'detail':detail}
+        res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
+        self.set_next_state('WAIT_FOR_DETAIL')
+
 
 ################################################################################
 class WAIT_FOR_TIMESLOT(State):
@@ -140,8 +161,8 @@ class WAIT_FOR_TIMESLOT(State):
                 # prompt for details PROMPT_DETAIL_MESSAGE
                 self.send_messages([PROMPT_DETAIL_MESSAGE])
                 # go to next state
-                #self.set_next_state('WAIT_FOR_DETAIL')
-                self.set_next_state('RESET') # FOR DEBUGGING !!!
+                self.set_next_state('WAIT_FOR_DETAIL')
+                #self.set_next_state('RESET') # FOR DEBUGGING !!!
             else:
                 # Something went wrong... Prompt user to call sales centre.
                 # Set next state back to INIT
@@ -279,7 +300,7 @@ class TIMESLOT_SUBMITTED(State):
 def get_state(sender_id):
     # ToDo: If timestamp is over x minutes ago, regardless state,
     # re-start from INIT
-    
+
     url = os.environ['GET_STATE_URL']
     cur_state = requests.get(url, {'sender_id':sender_id}).json()
     state = None
