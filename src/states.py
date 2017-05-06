@@ -70,7 +70,7 @@ class WAIT_FOR_ADDRESS(State):
         address = self.parse_address(usaddress.tag(sender_message))
         print json.dumps(address, indent=4)
 
-    def parse_address(input_str):
+    def parse_address(self, input_str):
         address = usaddress.tag(input_str)
         # compose street
         street = ''
