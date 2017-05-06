@@ -74,6 +74,10 @@ class RESET(State):
 class WAIT_FOR_ADDRESS(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('ADDRESS_SUBMITTED')
+        if nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
+            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech"), SEND_ADDRESS_AGAIN])
+            self.set_next_state('WAIT_FOR_ADDRESS')
+            return
         address = self.parse_address(sender_message)
         print json.dumps(address, indent=4)
         if not address.get('zip'):
