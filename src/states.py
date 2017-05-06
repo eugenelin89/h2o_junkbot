@@ -74,6 +74,7 @@ class WAIT_FOR_ADDRESS(State):
             url = os.environ['GET_STATE_URL']
             zip = requests.get(url, params = {'sender_id':self.sender_id} ).json()
             print json.dumps(zip, indent=4)
+            print type(zip)
 
 
     def parse_address(self, input_str):
