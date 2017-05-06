@@ -117,7 +117,12 @@ class WAIT_FOR_ADDRESS(State):
         street = ''
         if 'OccupancyType' in address[0].keys() and 'OccupancyIdentifier' in address[0].keys():
             street = '%s %s, '% (address[0].get('OccupancyType'), address[0].get('OccupancyIdentifier'))
-        street = street + '%s %s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'), address[0].get('StreetNamePostType'))
+        if not address[0].get('AddressNumber') or not address[0].get('StreetName'):
+            street = None
+        else if not address[0].get('StreetNamePostType'):
+            street = street + '%s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'))
+        else:
+            street = street + '%s %s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'), address[0].get('StreetNamePostType'))
         result = {
             'city':address[0].get('PlaceName'),
             'country':address[0].get('CountryName'),
