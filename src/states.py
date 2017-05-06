@@ -67,7 +67,7 @@ class RESET(State):
 ################################################################################
 class WAIT_FOR_ADDRESS(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
-        address = usaddress.parse(message)
+        address = usaddress.parse(sender_message)
         print json.dumps(address, indent=4)
 
 
@@ -83,6 +83,7 @@ class WAIT_FOR_DETAIL(State):
         if intent == DETAIL_DONE_INTENT:
             # move to the next intent
             print 'OK, FINISHED GETTING DETAILS!'
+            self.send_messages([ASK_FOR_ADDRESS])
             self.set_next_state('WAIT_FOR_ADDRESS')
             return
         qr = [{'content_type':'text', 'title':DONE, 'payload':DONE}]
