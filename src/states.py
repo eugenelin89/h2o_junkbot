@@ -93,15 +93,15 @@ class WAIT_FOR_ADDRESS(State):
                 address['country'] = 'USA'
         print json.dumps(address, indent = 4)
         if not address.get('city') or not address.get('state') or not address.get('street'):
-            msgs = [MISSING_ADDRESS_INFO]
+            msg = MISSING_ADDRESS_INFO
             if not address.get('city'):
-                msgs.append('City')
+                msg.append('\nCity')
             if not address.get('state'):
-                msgs.append('State/Province')
+                msg.append('\nState/Province')
             if not address.get('street'):
-                msgs.append('Street Address')
-            msgs.append(SEND_ADDRESS_AGAIN)
-            self.send_messages(msgs)
+                msg.append('\nStreet Address')
+            msg.append('\n'+SEND_ADDRESS_AGAIN)
+            self.send_messages([msg])
             self.set_next_state('WAIT_FOR_ADDRESS')
             return
         # Save address info in Firebase, and proceed.
