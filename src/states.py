@@ -67,7 +67,9 @@ class RESET(State):
 ################################################################################
 class WAIT_FOR_ADDRESS(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
-        pass
+        address = usaddress.parse(message)
+        print json.dumps(address, indent=4)
+
 
 
 ################################################################################
