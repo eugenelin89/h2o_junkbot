@@ -76,7 +76,7 @@ class WAIT_FOR_ADDRESS(State):
         print type(address)
         # compose street
         street = ''
-        if 'OccupancyType' in address.keys() and 'OccupancyIdentifier' in address.keys():
+        if 'OccupancyType' in address[0].keys() and 'OccupancyIdentifier' in address[0].keys():
             street = '%s %s, '% (address.get('OccupancyType'), address.get('OccupancyIdentifier'))
         street = street + '%s %s %s' % (address.get('AddressNumber'), address.get('StreetName'), address.get('StreetNamePostType'))
         result = {
