@@ -69,7 +69,7 @@ class WAIT_FOR_ADDRESS(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         address = self.parse_address(sender_message)
         print json.dumps(address, indent=4)
-        if not result.get('Zipcode'):
+        if not address.get('Zipcode'):
             # Get it from Firebase
             url = os.environ['GET_STATE_URL']
             zip = requests.get(url, params = {'sender_id':self.sender_id} ).json()
