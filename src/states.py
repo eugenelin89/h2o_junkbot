@@ -35,7 +35,7 @@ class State(object):
 
     def get_order_with_key(self, key):
         url = os.environ['ORDER_URL']
-        res = requests.get(url, params = {'sender_id':self.sender_id, 'key':key}).text
+        res = requests.get(url, params = {'sender_id':self.sender_id, 'key':key}).json
 
 
     @abstractmethod
