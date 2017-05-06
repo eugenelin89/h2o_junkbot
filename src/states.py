@@ -119,7 +119,7 @@ class WAIT_FOR_ADDRESS(State):
             street = '%s %s, '% (address[0].get('OccupancyType'), address[0].get('OccupancyIdentifier'))
         if not address[0].get('AddressNumber') or not address[0].get('StreetName'):
             street = None
-        else if not address[0].get('StreetNamePostType'):
+        elif not address[0].get('StreetNamePostType'):
             street = street + '%s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'))
         else:
             street = street + '%s %s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'), address[0].get('StreetNamePostType'))
