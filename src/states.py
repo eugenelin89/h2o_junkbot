@@ -99,7 +99,7 @@ class WAIT_FOR_ADDRESS(State):
             if not address.get('state'):
                 msg = msg + '\nState/Province'
             if not address.get('street'):
-                msg =  msg + '\nStreet Address')
+                msg =  msg + '\nStreet Address'
             msg = msg + '\n'+SEND_ADDRESS_AGAIN
             self.send_messages([msg])
             self.set_next_state('WAIT_FOR_ADDRESS')
