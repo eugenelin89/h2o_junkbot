@@ -73,6 +73,7 @@ class WAIT_FOR_ADDRESS(State):
     def parse_address(self, input_str):
         address = usaddress.tag(input_str)
         print json.dumps(address, indent=4)
+        print type(address)
         # compose street
         street = ''
         if 'OccupancyType' in address.keys() and 'OccupancyIdentifier' in address.keys():
