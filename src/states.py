@@ -94,12 +94,12 @@ class WAIT_FOR_ADDRESS(State):
         print json.dumps(address, indent = 4)
         if not address.get('city') or not address.get('state') or not address.get('street'):
             msg = MISSING_ADDRESS_INFO
+            if not address.get('street'):
+                msg =  msg + '\nStreet Address'
             if not address.get('city'):
                 msg = msg + '\nCity'
             if not address.get('state'):
                 msg = msg + '\nState/Province'
-            if not address.get('street'):
-                msg =  msg + '\nStreet Address'
             msg = msg + '\n'+SEND_ADDRESS_AGAIN
             self.send_messages([msg])
             self.set_next_state('WAIT_FOR_ADDRESS')
