@@ -73,6 +73,7 @@ class RESET(State):
 ################################################################################
 class WAIT_FOR_ADDRESS(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        self.set_next_state('ADDRESS_SUBMITTED')
         address = self.parse_address(sender_message)
         print json.dumps(address, indent=4)
         if not address.get('zip'):
@@ -91,8 +92,21 @@ class WAIT_FOR_ADDRESS(State):
             else:
                 address['country'] = 'USA'
         print json.dumps(address, indent = 4)
-
-
+        if not address.get('city') or not address.get('state') or note address.get('street'):
+            msgs: [MISSING_ADDRESS_INFO]
+            if not address.get('city'):
+                msgs.append('City')
+            if not address.get('state'):
+                msgs.append('State/Province')
+            if not address.get('street'):
+                msgs.append('Street Address')
+            msgs.append(SEND_ADDRESS_AGAIN)
+            self.send_messages(msgs)
+            self.set_next_state('WAIT_FOR_ADDRESS')
+            return
+        # Save address info in Firebase, and proceed.
+        self.update_order({'address':address})
+        self.set_next_state('RESET') # !!! FOR DEBUG
 
 
     def parse_address(self, input_str):

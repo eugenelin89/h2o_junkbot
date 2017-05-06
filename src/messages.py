@@ -12,4 +12,6 @@ HOLD_TIME_FAILED = 'We are unable to book the selected time... Please give us a 
 MORE_TIMESLOT = 'The time you selected is not available. Here are some other availabilities around the same time:'
 ASK_IF_DONE_DETAILS = 'Feel free to continue providing more details. Let me know you\'re done by clicking "Done!"'
 DONE = 'Done!'
-ASK_FOR_ADDRESS = 'What is the pickup address?'
+ASK_FOR_ADDRESS = 'What is your pickup address?'
+MISSING_ADDRESS_INFO = 'Looks like you are missing the following address info:'
+SEND_ADDRESS_AGAIN = 'Please send me your full address again?'
