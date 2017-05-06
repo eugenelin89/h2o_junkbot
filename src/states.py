@@ -76,8 +76,8 @@ class WAIT_FOR_ADDRESS(State):
         print json.dumps(address, indent=4)
         if not address.get('zip'):
             # Get it from Firebase
-
             address['zip'] = self.get_order_with_key('zip')
+            print 'found zip!' + json.dumps(address, indent=4)
         if not address.get('country'):
             # determine US or Canada based on the zip
             pattern = '[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]'
