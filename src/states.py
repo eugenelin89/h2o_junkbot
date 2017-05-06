@@ -67,8 +67,24 @@ class RESET(State):
 ################################################################################
 class WAIT_FOR_ADDRESS(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
-        address = usaddress.tag(sender_message)
+        address = self.parse_address(usaddress.tag(sender_message))
         print json.dumps(address, indent=4)
+
+    def parse_address(input_str):
+        address = usaddress.tag(input_str)
+        # compose street
+        street = ''
+        if 'OccupancyType' in address.keys() 'OccupancyIdentifier' in address.keys():
+            street = '%s %s, '% (address.get('OccupancyType'), address.get('OccupancyIdentifier'))
+        street = street + '%s %s %s' % (address.get('AddressNumber'), address.get('StreetName'), address.get('StreetNamePostType'))
+        result = {
+            'city':address.get('PlaceName'),
+            'country':address.get('CountryName'),
+            'state':address.get('StateName'),
+            'street':street,
+            'zip':address.get('ZipCode')
+        }
+        return result
 
 
 
