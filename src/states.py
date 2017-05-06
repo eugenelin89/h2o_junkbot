@@ -74,7 +74,7 @@ class WAIT_FOR_ADDRESS(State):
         address = usaddress.tag(input_str)
         # compose street
         street = ''
-        if 'OccupancyType' in address.keys() 'OccupancyIdentifier' in address.keys():
+        if 'OccupancyType' in address.keys() and 'OccupancyIdentifier' in address.keys():
             street = '%s %s, '% (address.get('OccupancyType'), address.get('OccupancyIdentifier'))
         street = street + '%s %s %s' % (address.get('AddressNumber'), address.get('StreetName'), address.get('StreetNamePostType'))
         result = {
