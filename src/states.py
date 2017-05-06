@@ -93,7 +93,7 @@ class WAIT_FOR_ADDRESS(State):
                 address['country'] = 'USA'
         print json.dumps(address, indent = 4)
         if not address.get('city') or not address.get('state') or not address.get('street'):
-            msgs: [MISSING_ADDRESS_INFO]
+            msgs = [MISSING_ADDRESS_INFO]
             if not address.get('city'):
                 msgs.append('City')
             if not address.get('state'):
