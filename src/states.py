@@ -351,7 +351,7 @@ class WAIT_FOR_ZIP(State):
 # Transient States #
 ####################
 ################################################################################
-class ADDRESS_SUBMITTED:
+class ADDRESS_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
 
