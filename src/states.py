@@ -95,12 +95,12 @@ class WAIT_FOR_ADDRESS(State):
         if not address.get('city') or not address.get('state') or not address.get('street'):
             msg = MISSING_ADDRESS_INFO
             if not address.get('city'):
-                msg.append('\nCity')
+                msg = msg + '\nCity'
             if not address.get('state'):
-                msg.append('\nState/Province')
+                msg = msg + '\nState/Province'
             if not address.get('street'):
-                msg.append('\nStreet Address')
-            msg.append('\n'+SEND_ADDRESS_AGAIN)
+                msg =  msg + '\nStreet Address')
+            msg = msg + '\n'+SEND_ADDRESS_AGAIN
             self.send_messages([msg])
             self.set_next_state('WAIT_FOR_ADDRESS')
             return
@@ -350,6 +350,11 @@ class WAIT_FOR_ZIP(State):
 ####################
 # Transient States #
 ####################
+################################################################################
+class ADDRESS_SUBMITTED:
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
 ################################################################################
 class ZIP_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
