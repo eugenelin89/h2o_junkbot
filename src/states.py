@@ -72,8 +72,8 @@ class WAIT_FOR_ADDRESS(State):
         if not address.get('Zipcode'):
             # Get it from Firebase
             url = os.environ['GET_STATE_URL']
-            zip = requests.get(url, params = {'sender_id':self.sender_id} ).json()
-            print json.dumps(zip, indent=4)
+            zip = requests.get(url, params = {'sender_id':self.sender_id} ).text
+            print zip
             print type(zip)
 
 
