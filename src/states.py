@@ -33,6 +33,11 @@ class State(object):
         res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
         return
 
+    def get_order_with_key(self, key):
+        url = os.environ['ORDER_URL']
+        res = requests.get(url, params = {'sender_id':self.sender_id, 'key':key}).text
+
+
     @abstractmethod
     def responds_to_sender(self, sender_id, message, nlp_data, payload):
         pass
@@ -71,8 +76,8 @@ class WAIT_FOR_ADDRESS(State):
         print json.dumps(address, indent=4)
         if not address.get('zip'):
             # Get it from Firebase
-            url = os.environ['GET_STATE_URL']
-            address['zip'] = requests.get(url, params = {'sender_id':self.sender_id} ).text
+
+            address['zip'] = self.get_order_with_key('zip')
         if not address.get('country'):
             # determine US or Canada based on the zip
             pattern = '[ABCEGHJKLMNPRSTVXY][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9][ABCEGHJKLMNPRSTVWXYZ][0-9]'
