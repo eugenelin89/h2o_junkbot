@@ -64,6 +64,11 @@ class RESET(State):
         res = requests.delete(url, params = {'sender_id':self.sender_id})
         self.set_next_state('INIT')
 
+################################################################################
+class WAIT_FOR_ADDRESS(State):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
 
 ################################################################################
 class WAIT_FOR_DETAIL(State):
