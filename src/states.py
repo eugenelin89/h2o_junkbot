@@ -77,14 +77,14 @@ class WAIT_FOR_ADDRESS(State):
         # compose street
         street = ''
         if 'OccupancyType' in address[0].keys() and 'OccupancyIdentifier' in address[0].keys():
-            street = '%s %s, '% (address.get('OccupancyType'), address.get('OccupancyIdentifier'))
-        street = street + '%s %s %s' % (address.get('AddressNumber'), address.get('StreetName'), address.get('StreetNamePostType'))
+            street = '%s %s, '% (address[0].get('OccupancyType'), address[0].get('OccupancyIdentifier'))
+        street = street + '%s %s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'), address[0].get('StreetNamePostType'))
         result = {
-            'city':address.get('PlaceName'),
-            'country':address.get('CountryName'),
-            'state':address.get('StateName'),
+            'city':address[0].get('PlaceName'),
+            'country':address[0].get('CountryName'),
+            'state':address[0].get('StateName'),
             'street':street,
-            'zip':address.get('ZipCode')
+            'zip':address[0].get('ZipCode')
         }
         return result
 
