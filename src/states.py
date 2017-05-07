@@ -436,10 +436,8 @@ def get_state(sender_id):
     # re-start from INIT
 
     # get timestamp from order. if +15 min ago, start over
-    res = requests.get(os.environ['ORDER_URL'], params = {'sender_id':sender_id, 'key':'timestamp'}).json()
-    timestamp = res.get('timestamp')
+    timestamp = requests.get(os.environ['ORDER_URL'], params = {'sender_id':sender_id, 'key':'timestamp'}).json()
     if timestamp:
-        timestamp = float(timestamp)
         curstamp = time.time()
         if (curstamp - timestamp) > MAX_WAIT_SECONDS:
             requests.delete(os.environ['ORDER_URL'], params = {'sender_id':sender_id})
