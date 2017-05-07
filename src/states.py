@@ -71,6 +71,32 @@ class RESET(State):
         self.set_next_state('INIT')
 
 ################################################################################
+class WAIT_FOR_PHONE(State):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        self.set_next_state('PHONE_SUBMITTED')
+        if nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
+            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech"), SEND_PHONE_NUMBER])
+            self.set_next_state('WAIT_FOR_PHONE')
+            return
+        pattern = r'\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*'
+        p = re.compile(pattern)
+        phone_segments = p.findall(sender_message)
+        if not len(pone_segments):
+            # prompt the sender for phone number again
+            self.send_messages([SEND_PHONE_NUMBER])
+            self.set_next_state('WAIT_FOR_PHONE')
+            return
+        phone = ''
+        for segment in phone_segments:
+            phone = phone + segment
+        self.update_order({'phone':phone})
+
+
+
+
+
+
+################################################################################
 class WAIT_FOR_ADDRESS(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('ADDRESS_SUBMITTED')
@@ -110,7 +136,8 @@ class WAIT_FOR_ADDRESS(State):
             return
         # Save address info in Firebase, and proceed.
         self.update_order({'address':address})
-        self.set_next_state('RESET') # !!! FOR DEBUG
+        self.send_messages([SEND_PHONE_NUMBER])
+        self.set_next_state('WAIT_FOR_PHONE') # !!! FOR DEBUG
 
 
     def parse_address(self, input_str):
@@ -359,6 +386,11 @@ class WAIT_FOR_ZIP(State):
 ####################
 # Transient States #
 ####################
+################################################################################
+class PHONE_SUBMITTED(State):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
 ################################################################################
 class ADDRESS_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
