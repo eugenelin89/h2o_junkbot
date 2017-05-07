@@ -101,7 +101,7 @@ class WAIT_FOR_PHONE(State):
             print segment
             phone = phone + segment
         self.update_order({'phone':phone})
-        self.set_next_state('RESET')
+        self.set_next_state('RESET') # FOR DEBUG.
 
 
 
@@ -273,6 +273,9 @@ class WAIT_FOR_TIMESLOT(State):
             my_obe = obe.OBE()
             is_time_held = my_obe.hold_timeslot(service_id, start_time, finish_time)
             if is_time_held:
+                # Save the timeslot info in Firebase
+                self.update_order({'start_time':start_time})
+                self.update_order({'finish_time':finish_time})
                 # prompt for details PROMPT_DETAIL_MESSAGE
                 self.send_messages([PROMPT_DETAIL_MESSAGE])
                 # go to next state
