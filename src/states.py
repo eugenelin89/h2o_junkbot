@@ -5,6 +5,7 @@ from messages import *
 from intents import *
 
 MAX_TIME_SELECTIONS = 5
+MAX_WAIT_SECONDS = 1 * 60
 
 class State(object):
     __metaclass__ = ABCMeta
@@ -433,6 +434,15 @@ class DETAIL_SUBMITTED(State):
 def get_state(sender_id):
     # ToDo: If timestamp is over x minutes ago, regardless state,
     # re-start from INIT
+
+    # get timestamp from order. if +15 min ago, start over
+    res = requests.get(os.environ['ORDER_URL'], params = {'sender_id':sender_id, 'key':'timestamp'}).json()
+    timestamp = res.get('timestamp')
+    if timestamp:
+        timestamp = float(timestamp)
+        curstamp = time.time()
+        if (curstamp - timestamp) > MAX_WAIT_SECONDS:
+            requests.delete(os.environ['ORDER_URL'], params = {'sender_id':sender_id})
 
     url = os.environ['GET_STATE_URL']
     cur_state = requests.get(url, {'sender_id':sender_id}).json()
