@@ -82,7 +82,7 @@ class RESET(State):
 ################################################################################
 class WAIT_FOR_CONFIRMATION(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
-        self.set_next_state('RESET')
+        pass
 
 
 ################################################################################
@@ -113,7 +113,8 @@ class WAIT_FOR_PHONE(State):
         res['availabilities'] = None
         print json.dumps(res, indent=4)
         self.send_messages([json.dumps(res, indent=4)])
-        self.set_next_state('WAIT_FOR_CONFIRMATION')
+        #self.set_next_state('WAIT_FOR_CONFIRMATION')
+        self.set_next_state('RESET') # Debug
 
 
 
