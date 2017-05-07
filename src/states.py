@@ -109,7 +109,7 @@ class WAIT_FOR_PHONE(State):
             phone = phone + segment
         self.update_order({'phone':phone})
         # Getting confirmation info
-        res = requests.get(os.environ['CONFIRM_URL'], {sender_id : self.sender_id}).json()
+        res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
         print json.dumps(res, indent=4)
         self.set_next_state('WAIT_FOR_CONFIRMATION')
 
