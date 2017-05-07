@@ -61,6 +61,7 @@ class INIT(State):
         self.send_messages([PROMPT_ZIP_MESSAGE])
         # 4. Get first_name and last_name
         profile = fb.get_fb_profile(self.sender_id)
+        print json.dumps(profile, indent=4)
         self.update_order({'first_name':profile.first_name, 'last_name':profile.last_name})
         # 5. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
