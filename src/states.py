@@ -5,7 +5,7 @@ from messages import *
 from intents import *
 
 MAX_TIME_SELECTIONS = 5
-MAX_WAIT_SECONDS = 1 * 60
+MAX_WAIT_SECONDS = 15 * 60
 
 class State(object):
     __metaclass__ = ABCMeta
