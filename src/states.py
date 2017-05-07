@@ -89,7 +89,7 @@ class WAIT_FOR_PHONE(State):
             return
         print 'Valid Phone Number'
         phone = ''
-        for segment in phone_segments:
+        for segment in list(phone_segments[0]):
             print segment
             phone = phone + segment
         self.update_order({'phone':phone})
