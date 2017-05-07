@@ -81,15 +81,18 @@ class WAIT_FOR_PHONE(State):
         pattern = r'\D*([2-9]\d{2})(\D*)([2-9]\d{2})(\D*)(\d{4})\D*'
         p = re.compile(pattern)
         phone_segments = p.findall(sender_message)
-        if not len(pHone_segments):
+        if not len(phone_segments):
             # prompt the sender for phone number again
+            print 'Invalid Phone Number'
             self.send_messages([SEND_PHONE_NUMBER])
             self.set_next_state('WAIT_FOR_PHONE')
             return
+        print 'Valid Phone Number'
         phone = ''
         for segment in phone_segments:
             phone = phone + segment
         self.update_order({'phone':phone})
+        self.set_next_state('RESET')
 
 
 
