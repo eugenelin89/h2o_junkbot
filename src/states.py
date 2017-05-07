@@ -1,4 +1,4 @@
-import requests, json, os, re, dateutil.parser, datetime, pytz, bisect, usaddress
+import requests, json, os, re, dateutil.parser, datetime, pytz, bisect, usaddress, time
 import apiai, obe, fb
 from abc import ABCMeta, abstractmethod
 from messages import *
@@ -51,6 +51,8 @@ class INIT(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         # ToDo: time stamp
         print 'INIT.responds_to_user'
+        # 0. timestamp
+        self.update_order({'timestamp':time.time()})
         # 1. If smalltalk avail, reply with smalltalk
         action = nlp_data.get('result').get('action')
         if action.strip().find('smalltalk') == 0:
