@@ -112,19 +112,27 @@ class WAIT_FOR_PHONE(State):
         res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
         res['availabilities'] = None
         print json.dumps(res, indent=4)
-        self.send_messages([json.dumps(res, indent=4)])
+        self.send_messages([self.__format_confirmation(res)])
         #self.set_next_state('WAIT_FOR_CONFIRMATION')
         self.set_next_state('RESET') # Debug
 
-    def __format_confirmation(order):
+    def __format_confirmation(self, order):
         # Name
         name = order.get('first_name') + ' ' + order.get('last_name')
         # Phone
-
+        phone = order.get('phone')
         # Address
+        address = '%s, %s, %s, %s, %s'  % order.get('address').get('street'), \
+                         order.get('address').get('city'), \
+                         order.get('address').get('state'), \
+                         order.get('address').get('country'), \
+                         order.get('address').get('zip') )
         # Appointment time
+        appointment_time  = dateutil.parser.parse(order.get('start_time')).strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
+
         # Details
-        pass
+        details = order.get('detail').replace(' -|- ','\n')
+        return 'Name: %s\nPhone: %s\nAddress: %s\nAppointment: %s\nDetails: %s' % (name, phone, address, appointment_time, details)
 
 
 
