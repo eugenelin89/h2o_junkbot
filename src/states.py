@@ -337,6 +337,7 @@ class WAIT_FOR_TIMESLOT(State):
             finish_time = availabilities[pos].get('finish')
             service_id = timezone = self.__get_availabilities().get("serviceId")
             print 'start: '+start_time+' finish: '+finish_time
+            self.send_messages([GIVE_FEW_SECONDS])
             my_obe = obe.OBE()
             is_time_held = my_obe.hold_timeslot(service_id, start_time, finish_time)
             if is_time_held:
