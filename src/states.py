@@ -86,6 +86,11 @@ class WAIT_FOR_CONFIRMATION(State):
 
 
 ################################################################################
+class WAIT_FOR_EMAIL(State):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
+################################################################################
 class WAIT_FOR_PHONE(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('PHONE_SUBMITTED')
@@ -108,13 +113,21 @@ class WAIT_FOR_PHONE(State):
             print segment
             phone = phone + segment
         self.update_order({'phone':phone})
+        ## Getting confirmation info
+        #res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
+        #self.send_messages([self.__format_confirmation(res)])
+        #qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
+        #self.send_messages([PROCEED], quick_reply=qr)
+        self.__prompt_for_next_state()
+        self.set_next_state('RESET') # Debug
+
+    # ToDo: Make this abstract method in ABC and implement in subclasses
+    def prompt_for_next_state(self):
         # Getting confirmation info
         res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
         self.send_messages([self.__format_confirmation(res)])
         qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
         self.send_messages([PROCEED], quick_reply=qr)
-        #self.set_next_state('WAIT_FOR_CONFIRMATION')
-        self.set_next_state('RESET') # Debug
 
     def __format_confirmation(self, order):
         # Name
