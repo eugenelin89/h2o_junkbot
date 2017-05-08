@@ -83,6 +83,7 @@ class INIT(State):
 class RESET(State):
     def __init__(self, sender_id):
         super(RESET, self).__init__(sender_id)
+        print 'RESET STATE instantiated'
         # DELETE order for sender_id
         url = os.environ['ORDER_URL']
         res = requests.delete(url, params = {'sender_id':self.sender_id})
