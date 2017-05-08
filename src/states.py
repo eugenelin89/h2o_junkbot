@@ -141,7 +141,7 @@ class WAIT_FOR_ADDRESS(State):
             self.send_messages([nlp_data.get("result").get("fulfillment").get("speech"), SEND_ADDRESS_AGAIN])
             self.set_next_state('WAIT_FOR_ADDRESS')
             return
-        address = self.parse_address(sender_message)
+        address = self.parse_address(sender_message.upper())
         print json.dumps(address, indent=4)
         if not address.get('zip'):
             # Get it from Firebase
@@ -192,11 +192,11 @@ class WAIT_FOR_ADDRESS(State):
         else:
             street = street + '%s %s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'), address[0].get('StreetNamePostType'))
         result = {
-            'city':address[0].get('PlaceName').upper(),
-            'country':address[0].get('CountryName').upper(),
-            'state':address[0].get('StateName').upper(),
+            'city':address[0].get('PlaceName'),
+            'country':address[0].get('CountryName'),
+            'state':address[0].get('StateName'),
             'street':street.upper(),
-            'zip':address[0].get('ZipCode').upper()
+            'zip':address[0].get('ZipCode')
         }
         return result
 
