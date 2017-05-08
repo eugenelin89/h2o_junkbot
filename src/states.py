@@ -104,11 +104,54 @@ class WAIT_FOR_CONFIRMATION(State):
 ################################################################################
 class WAIT_FOR_EMAIL(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
-        pass
+        self.set_next_state('EMAIL_SUBMITTED')
+        if nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
+            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech"), SEND_PHONE_NUMBER])
+            self.set_next_state('WAIT_FOR_EMAIL')
+            return
+        pattern = r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)'
+        p = re.compile(pattern)
+        emails = p.findall(sender_message)
+        if not len(emails):
+            print 'Invalid Email'
+            self.sender_message(SEND_EMAIL)
+            self.set_next_state('WAIT_FOR_EMAIL')
+            return
+        print 'valid Email'
+        email = emails[0]
+        self.update_order({'email':email})
+        self._next_state
 
-    # ToDo: Refactor state transition here
-    def _next_state():
-        pass
+    def _next_state(self):
+        # Getting confirmation info
+        res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
+        self.send_messages([self.__format_confirmation(res)])
+        qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
+        self.send_messages([PROCEED], quick_reply=qr)
+        self.set_next_state('RESET') # Debug
+
+    def __format_confirmation(self, order):
+        # Name
+        name = order.get('first_name') + ' ' + order.get('last_name')
+        # Phone
+        phone = order.get('phone')
+
+        # EMail
+        email = order.get('email')
+
+        # Address
+        address = '%s %s, %s, %s, %s'  % (order.get('address').get('street'), \
+                         order.get('address').get('city'), \
+                         order.get('address').get('state'), \
+                         order.get('address').get('country'), \
+                         order.get('address').get('zip') )
+        # Appointment time
+        appointment_time  = dateutil.parser.parse(order.get('start_time')).strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
+
+        # Details
+        details = order.get('detail').replace(' -|- ','\n')
+        return 'Name: %s\nPhone: %s\nEmail: %s\nAddress: %s\nAppointment: %s\nDetails:\n%s' % (name, phone, address, appointment_time, details)
+
 
 ################################################################################
 class WAIT_FOR_PHONE(State):
@@ -136,14 +179,21 @@ class WAIT_FOR_PHONE(State):
         self._next_state()
 
 
-    # ToDo: Make this abstract method in ABC and implement in subclasses
+
+
     def _next_state(self):
-        # Getting confirmation info
-        res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
-        self.send_messages([self.__format_confirmation(res)])
-        qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
-        self.send_messages([PROCEED], quick_reply=qr)
-        self.set_next_state('RESET') # Debug
+        # Prompt for Email
+        self.send_messages([SEND_EMAIL])
+        self.set_next_state('WAIT_FOR_EMAIL')
+        pass
+
+    #def _next_state(self):
+    #    # Getting confirmation info
+    #    res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
+    #    self.send_messages([self.__format_confirmation(res)])
+    #    qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
+    #    self.send_messages([PROCEED], quick_reply=qr)
+    #    self.set_next_state('RESET') # Debug
 
     def __format_confirmation(self, order):
         # Name
@@ -211,7 +261,7 @@ class WAIT_FOR_ADDRESS(State):
         # Save address info in Firebase, and proceed.
         self.update_order({'address':address})
         self.send_messages([SEND_PHONE_NUMBER])
-        self.set_next_state('WAIT_FOR_PHONE') # !!! FOR DEBUG
+        self.set_next_state('WAIT_FOR_PHONE')
 
 
     def parse_address(self, input_str):
@@ -474,6 +524,11 @@ class WAIT_FOR_ZIP(State):
 ####################
 # Transient States #
 ####################
+################################################################################
+class EMAIL_SUBMITTED(State):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
 ################################################################################
 class PHONE_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
