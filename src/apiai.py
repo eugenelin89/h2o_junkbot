@@ -18,7 +18,7 @@ def query(sender_id, content):
     return res
 
 
-def set_context(sender_id, context, lifespan=3):
+def set_context(sender_id, context, lifespan=1):
     headers = {
         "Content-Type" : "application/json",
         "Authorization" : os.environ['APIAI_AUTH'],

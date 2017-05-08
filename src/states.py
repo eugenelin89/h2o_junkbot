@@ -45,7 +45,7 @@ class State(object):
         pass
 
     @abstractmethod
-    def _next_state():
+    def _next_state(self):
         pass
 
 #####################
@@ -77,27 +77,50 @@ class INIT(State):
         return
 
     # ToDo: Refactor state transition here
-    def _next_state():
+    def _next_state(self):
         pass
 ################################################################################
 class RESET(State):
-    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+    def __init__(self, sender_id):
+        super(RESET, self).__init__(sender_id)
         # DELETE order for sender_id
         url = os.environ['ORDER_URL']
         res = requests.delete(url, params = {'sender_id':self.sender_id})
         self.set_next_state('INIT')
 
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
     # ToDo: Refactor state transition here
-    def _next_state():
+    def _next_state(self):
         pass
 
 ################################################################################
 class WAIT_FOR_CONFIRMATION(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
-        pass
+        self.set_next_state('CONFIRMATION_SUBMITTED')
+        # Anything senders sent will be recorded.
+        if nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
+            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech")])
+            qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
+            self.send_messages([PROCEED], quick_reply=qr)
+            self.set_next_state('WAIT_FOR_CONFIRMATION')
+            return
+        if nlp_data.get('result').get('metadata').get('intentName') == CONFIRM_INTENT:
+            print 'Proceed to Booking...'
+        elif nlp_data.get('result').get('metadata').get('intentName') == CANCEL_INTENT:
+            print 'Cancel Booking...'
+        else:
+            qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
+            self.send_messages([PROCEED], quick_reply=qr)
+            self.set_next_state('WAIT_FOR_CONFIRMATION')
+
+
+    def __book_appointment(self):
+        return True
 
     # ToDo: Refactor state transition here
-    def _next_state():
+    def _next_state(self):
         pass
 
 
@@ -106,7 +129,7 @@ class WAIT_FOR_EMAIL(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         self.set_next_state('EMAIL_SUBMITTED')
         if nlp_data.get('result').get('action').strip().find('smalltalk') == 0:
-            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech"), SEND_PHONE_NUMBER])
+            self.send_messages([nlp_data.get("result").get("fulfillment").get("speech")])
             self.set_next_state('WAIT_FOR_EMAIL')
             return
         pattern = r'([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)'
@@ -178,47 +201,11 @@ class WAIT_FOR_PHONE(State):
         self.update_order({'phone':phone})
         self._next_state()
 
-
-
-
     def _next_state(self):
         # Prompt for Email
         self.send_messages([SEND_EMAIL])
         self.set_next_state('WAIT_FOR_EMAIL')
         pass
-
-    #def _next_state(self):
-    #    # Getting confirmation info
-    #    res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
-    #    self.send_messages([self.__format_confirmation(res)])
-    #    qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
-    #    self.send_messages([PROCEED], quick_reply=qr)
-    #    self.set_next_state('RESET') # Debug
-
-    def __format_confirmation(self, order):
-        # Name
-        name = order.get('first_name') + ' ' + order.get('last_name')
-        # Phone
-        phone = order.get('phone')
-        # Address
-        address = '%s %s, %s, %s, %s'  % (order.get('address').get('street'), \
-                         order.get('address').get('city'), \
-                         order.get('address').get('state'), \
-                         order.get('address').get('country'), \
-                         order.get('address').get('zip') )
-        # Appointment time
-        appointment_time  = dateutil.parser.parse(order.get('start_time')).strftime("%a %b %d, %I:%M%p") # Wed May 03, 09:30AM
-
-        # Details
-        details = order.get('detail').replace(' -|- ','\n')
-        return 'Name: %s\nPhone: %s\nAddress: %s\nAppointment: %s\nDetails:\n%s' % (name, phone, address, appointment_time, details)
-
-
-
-
-
-
-
 
 ################################################################################
 class WAIT_FOR_ADDRESS(State):
@@ -288,7 +275,7 @@ class WAIT_FOR_ADDRESS(State):
         return result
 
     # ToDo: Refactor state transition here
-    def _next_state():
+    def _next_state(self):
         pass
 
 ################################################################################
@@ -320,7 +307,7 @@ class WAIT_FOR_DETAIL(State):
         self.set_next_state('WAIT_FOR_DETAIL')
 
     # ToDo: Refactor state transition here
-    def _next_state():
+    def _next_state(self):
         pass
 
 ################################################################################
@@ -445,7 +432,7 @@ class WAIT_FOR_TIMESLOT(State):
         return self.availabilities
 
     # ToDo: Refactor state transition here
-    def _next_state():
+    def _next_state(self):
         pass
 
 ################################################################################
@@ -524,6 +511,10 @@ class WAIT_FOR_ZIP(State):
 ####################
 # Transient States #
 ####################
+################################################################################
+class CONFIRMATION_SUBMITTED(State):
+    def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
 ################################################################################
 class EMAIL_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
