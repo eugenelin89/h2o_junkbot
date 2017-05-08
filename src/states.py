@@ -108,6 +108,19 @@ class WAIT_FOR_CONFIRMATION(State):
             return
         if nlp_data.get('result').get('metadata').get('intentName') == CONFIRM_INTENT:
             print 'Proceed to Booking...'
+            is_booked = self.__book_appointment()
+            if is_booked:
+                self.send_messages([IS_CONFIRMED])
+                # Archive Order
+                # Delete Order
+                requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
+            else:
+                # Ask sener to call support
+                self.send_messages([BOOKING_FAILED])
+                # Archive Order
+                # DELETE order for sender_id
+                requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
+
         elif nlp_data.get('result').get('metadata').get('intentName') == CANCEL_INTENT:
             print 'Cancel Booking...'
             requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
