@@ -120,7 +120,7 @@ class WAIT_FOR_EMAIL(State):
         print 'valid Email'
         email = emails[0]
         self.update_order({'email':email})
-        self._next_state
+        self._next_state()
 
     def _next_state(self):
         # Getting confirmation info
