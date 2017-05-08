@@ -110,9 +110,9 @@ class WAIT_FOR_PHONE(State):
         self.update_order({'phone':phone})
         # Getting confirmation info
         res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
-        res['availabilities'] = None
-        print json.dumps(res, indent=4)
         self.send_messages([self.__format_confirmation(res)])
+        qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
+        self.send_messages([PROCEED], quick_reply=qr)
         #self.set_next_state('WAIT_FOR_CONFIRMATION')
         self.set_next_state('RESET') # Debug
 
