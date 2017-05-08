@@ -45,7 +45,7 @@ class State(object):
         pass
 
     @abstractmethod
-    def _next_state()
+    def _next_state():
         pass
 
 #####################
@@ -77,7 +77,7 @@ class INIT(State):
         return
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 ################################################################################
 class RESET(State):
@@ -88,7 +88,7 @@ class RESET(State):
         self.set_next_state('INIT')
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 
 ################################################################################
@@ -97,7 +97,7 @@ class WAIT_FOR_CONFIRMATION(State):
         pass
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 
 
@@ -107,7 +107,7 @@ class WAIT_FOR_EMAIL(State):
         pass
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 
 ################################################################################
@@ -238,7 +238,7 @@ class WAIT_FOR_ADDRESS(State):
         return result
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 
 ################################################################################
@@ -270,7 +270,7 @@ class WAIT_FOR_DETAIL(State):
         self.set_next_state('WAIT_FOR_DETAIL')
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 
 ################################################################################
@@ -394,7 +394,7 @@ class WAIT_FOR_TIMESLOT(State):
         return self.availabilities
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 
 ################################################################################
@@ -466,7 +466,7 @@ class WAIT_FOR_ZIP(State):
         return
 
     # ToDo: Refactor state transition here
-    def _next_state()
+    def _next_state():
         pass
 
 
