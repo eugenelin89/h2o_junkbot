@@ -44,6 +44,10 @@ class State(object):
     def responds_to_sender(self, sender_id, message, nlp_data, payload):
         pass
 
+    @abstractmethod
+    def _next_state()
+        pass
+
 #####################
 # Persistent States #
 #####################
@@ -71,6 +75,10 @@ class INIT(State):
         # 5. Change state to WAIT_FOR_ZIP
         result = self.set_next_state('WAIT_FOR_ZIP')
         return
+
+    # ToDo: Refactor state transition here
+    def _next_state()
+        pass
 ################################################################################
 class RESET(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
@@ -79,15 +87,27 @@ class RESET(State):
         res = requests.delete(url, params = {'sender_id':self.sender_id})
         self.set_next_state('INIT')
 
+    # ToDo: Refactor state transition here
+    def _next_state()
+        pass
+
 ################################################################################
 class WAIT_FOR_CONFIRMATION(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
+    # ToDo: Refactor state transition here
+    def _next_state()
         pass
 
 
 ################################################################################
 class WAIT_FOR_EMAIL(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
+    # ToDo: Refactor state transition here
+    def _next_state()
         pass
 
 ################################################################################
@@ -217,7 +237,9 @@ class WAIT_FOR_ADDRESS(State):
         }
         return result
 
-
+    # ToDo: Refactor state transition here
+    def _next_state()
+        pass
 
 ################################################################################
 class WAIT_FOR_DETAIL(State):
@@ -247,6 +269,9 @@ class WAIT_FOR_DETAIL(State):
         res = requests.post(url, json = payload, params = {'sender_id':self.sender_id})
         self.set_next_state('WAIT_FOR_DETAIL')
 
+    # ToDo: Refactor state transition here
+    def _next_state()
+        pass
 
 ################################################################################
 class WAIT_FOR_TIMESLOT(State):
@@ -368,6 +393,9 @@ class WAIT_FOR_TIMESLOT(State):
             self.availabilities = requests.get(os.environ['GET_AVAIL_URL'], {'sender_id':self.sender_id}).json()
         return self.availabilities
 
+    # ToDo: Refactor state transition here
+    def _next_state()
+        pass
 
 ################################################################################
 class WAIT_FOR_ZIP(State):
@@ -437,7 +465,9 @@ class WAIT_FOR_ZIP(State):
             self.set_next_state('WAIT_FOR_ZIP') # stay in this state
         return
 
-
+    # ToDo: Refactor state transition here
+    def _next_state()
+        pass
 
 
 ####################
