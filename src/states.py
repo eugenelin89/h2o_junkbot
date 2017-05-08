@@ -116,6 +116,16 @@ class WAIT_FOR_PHONE(State):
         #self.set_next_state('WAIT_FOR_CONFIRMATION')
         self.set_next_state('RESET') # Debug
 
+    def __format_confirmation(order):
+        # Name
+        name = order.get('first_name') + ' ' + order.get('last_name')
+        # Phone
+
+        # Address
+        # Appointment time
+        # Details
+        pass
+
 
 
 
@@ -182,11 +192,11 @@ class WAIT_FOR_ADDRESS(State):
         else:
             street = street + '%s %s %s' % (address[0].get('AddressNumber'), address[0].get('StreetName'), address[0].get('StreetNamePostType'))
         result = {
-            'city':address[0].get('PlaceName'),
-            'country':address[0].get('CountryName'),
-            'state':address[0].get('StateName'),
-            'street':street,
-            'zip':address[0].get('ZipCode')
+            'city':address[0].get('PlaceName').upper(),
+            'country':address[0].get('CountryName').upper(),
+            'state':address[0].get('StateName').upper(),
+            'street':street.upper(),
+            'zip':address[0].get('ZipCode').upper()
         }
         return result
 
