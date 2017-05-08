@@ -85,8 +85,7 @@ class RESET(State):
         super(RESET, self).__init__(sender_id)
         print 'RESET STATE instantiated'
         # DELETE order for sender_id
-        url = os.environ['ORDER_URL']
-        res = requests.delete(url, params = {'sender_id':self.sender_id})
+        requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
         self.set_next_state('INIT')
 
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
@@ -111,6 +110,8 @@ class WAIT_FOR_CONFIRMATION(State):
             print 'Proceed to Booking...'
         elif nlp_data.get('result').get('metadata').get('intentName') == CANCEL_INTENT:
             print 'Cancel Booking...'
+            requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
+            self.send_messages([BYE])
         else:
             qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
             self.send_messages([PROCEED], quick_reply=qr)
@@ -516,7 +517,7 @@ class WAIT_FOR_ZIP(State):
 class CONFIRMATION_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
-        
+
     def _next_state(self):
         pass
 
