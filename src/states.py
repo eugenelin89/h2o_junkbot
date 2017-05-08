@@ -132,7 +132,7 @@ class WAIT_FOR_CONFIRMATION(State):
 
 
     def __book_appointment(self):
-        return True
+        return False
 
     # ToDo: Refactor state transition here
     def _next_state(self):
