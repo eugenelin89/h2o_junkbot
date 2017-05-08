@@ -113,16 +113,17 @@ class WAIT_FOR_PHONE(State):
             print segment
             phone = phone + segment
         self.update_order({'phone':phone})
-        self._prompt_for_next_state()
-        self.set_next_state('RESET') # Debug
+        self._state()
+
 
     # ToDo: Make this abstract method in ABC and implement in subclasses
-    def _prompt_for_next_state(self):
+    def _next_state(self):
         # Getting confirmation info
         res = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
         self.send_messages([self.__format_confirmation(res)])
         qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
         self.send_messages([PROCEED], quick_reply=qr)
+        self.set_next_state('RESET') # Debug
 
     def __format_confirmation(self, order):
         # Name
