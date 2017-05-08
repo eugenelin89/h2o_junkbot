@@ -150,7 +150,7 @@ class WAIT_FOR_EMAIL(State):
 
         # Details
         details = order.get('detail').replace(' -|- ','\n')
-        return 'Name: %s\nPhone: %s\nEmail: %s\nAddress: %s\nAppointment: %s\nDetails:\n%s' % (name, phone, address, appointment_time, details)
+        return 'Name: %s\nPhone: %s\nEmail: %s\nAddress: %s\nAppointment: %s\nDetails:\n%s' % (name, phone, email, address, appointment_time, details)
 
 
 ################################################################################
