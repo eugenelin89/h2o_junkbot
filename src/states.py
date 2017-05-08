@@ -122,7 +122,7 @@ class WAIT_FOR_PHONE(State):
         # Phone
         phone = order.get('phone')
         # Address
-        address = '%s, %s, %s, %s, %s'  % order.get('address').get('street'), \
+        address = '%s, %s, %s, %s, %s'  % (order.get('address').get('street'), \
                          order.get('address').get('city'), \
                          order.get('address').get('state'), \
                          order.get('address').get('country'), \
