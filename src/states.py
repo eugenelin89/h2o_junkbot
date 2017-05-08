@@ -133,7 +133,7 @@ class WAIT_FOR_PHONE(State):
             print segment
             phone = phone + segment
         self.update_order({'phone':phone})
-        self._state()
+        self._next_state()
 
 
     # ToDo: Make this abstract method in ABC and implement in subclasses
