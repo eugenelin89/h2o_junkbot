@@ -505,7 +505,7 @@ class WAIT_FOR_ZIP(State):
         return
 
     # ToDo: Refactor state transition here
-    def _next_state():
+    def _next_state(self):
         pass
 
 
@@ -516,9 +516,16 @@ class WAIT_FOR_ZIP(State):
 class CONFIRMATION_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
+        
+    def _next_state(self):
+        pass
+
 ################################################################################
 class EMAIL_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
+    def _next_state(self):
         pass
 
 ################################################################################
@@ -526,9 +533,15 @@ class PHONE_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
 
+    def _next_state(self):
+        pass
+
 ################################################################################
 class ADDRESS_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
+    def _next_state(self):
         pass
 
 ################################################################################
@@ -536,14 +549,23 @@ class ZIP_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
 
+    def _next_state(self):
+        pass
+
 ################################################################################
 class TIMESLOT_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
 
+    def _next_state(self):
+        pass
+
 ################################################################################
 class DETAIL_SUBMITTED(State):
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
+        pass
+
+    def _next_state(self):
         pass
 
 #################################
