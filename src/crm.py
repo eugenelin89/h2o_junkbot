@@ -51,7 +51,29 @@ class CRM(object):
         print 'junk_customer: ' + json.dumps(junk_customer, indent = 4)
 
         # Step 2: Junk Service
-        pass
+        url2 = self.instance_url + os.environ['OBE_RESOURCE_PATH_JUNK_SERVICE']
+        data2 = {
+            'brand' : os.environ['OBE_BRAND'],
+            'franchise_id' : booking_info.get('franchise_id'),
+            'first_name' : booking_info.get('first_name'),
+            'phone' : booking_info.get('phone'),
+            'email' : booking_info.get('email'),
+            'to_address' : to_address,
+            'customer_type' : 'Residential',
+            'notes' : 'Booked by Junkbot',
+            'service_type_id' : service_type_id,
+            'recordowner_id' : recordowner_id,
+            'recordowner_account_id' : recordowner_account_id,
+            'opportunity_id' : opportunity_id,
+            'globalnote_id' : globalnote_id,
+            'contact_id' : contact_id,
+            'account_id' : account_id
+        }
+        res2 = requests.post(url2, json = data2, headers = headers)
+        if res2.status_code != requests.codes.ok:
+            return {'error': res2.text}
+        print 'Booking Result: ' + json.dumps(res2.json, indent = 4)
+        return res2.json()
 
     def is_zip_verified(self, zipcode):
         # Authenticate
