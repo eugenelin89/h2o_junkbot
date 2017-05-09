@@ -132,6 +132,9 @@ class WAIT_FOR_CONFIRMATION(State):
 
 
     def __book_appointment(self):
+        booking_info = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
+        my_crm = crm.CRM()
+        my_crm.execute_booking(booking_info)
         return False
 
     # ToDo: Refactor state transition here
@@ -246,7 +249,7 @@ class WAIT_FOR_ADDRESS(State):
             if r:
                 address['country'] = 'Canada'
             else:
-                address['country'] = 'USA'
+                address['country'] = 'United States'
         print json.dumps(address, indent = 4)
         if not address.get('city') or not address.get('state') or not address.get('street'):
             msg = MISSING_ADDRESS_INFO

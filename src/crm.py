@@ -10,6 +10,49 @@ class CRM(object):
         self.authenticated = False
         self.__authenticate()
 
+    def execute_booking(self, booking_info):
+        if not self.__authenticate():
+            return {'error':'OBE Authentication error'}
+
+        # Step 1: Junk customer
+        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_JUNK_CUSTOMER']
+        address = booking_info.get('address')
+        to_address = '%s;%s;%s;%s;%s' % ( address.get('city'), address.get('country'), \
+                                           address.get('state'), address.get('street'), \
+                                           address.get('zip') )
+        headers = {
+            "Authorization":'Bearer '+self.access_token,
+            'Content-Type':'application/json'
+        }
+        data = {
+            'brand' : os.environ['OBE_BRAND'],
+            'franchise_id' : booking_info.get('franchise_id'),
+            'first_name' : booking_info.get('first_name'),
+            'last_name' : booking_info.get('last_name'),
+            'phone' : booking_info.get('phone'),
+            'email' : booking_info.get('email'),
+            'to_address' : to_address,
+            'start_date_time' : booking_info.get('start_time'),
+            'finish_date_time' : booking_info.get('finish_time'),
+            'pickup_description' : booking_info.get('detail'),
+            'additional_information_required' : 0
+        }
+        res = requests.post(url, json = data, headers = headers)
+        if res.status_code != requests.codes.ok:
+             return {'error': res.text}
+        junk_customer = res.json()
+        service_type_id = junk_customer.get('junk_customer')
+        recordowner_id = junk_customer.get('recordowner_id')
+        recordowner_account_id = junk_customer.get('recordowner_account_id')
+        opportunity_id = junk_customer.get('opportunity_id')
+        globalnote_id = junk_customer.get('globalnote_id')
+        contact_id = junk_customer.get('contact_id')
+        account_id = junk_customer.get('account_id')
+        print 'junk_customer: ' + junk_customer
+
+        # Step 2: Junk Service
+        pass
+
     def is_zip_verified(self, zipcode):
         # Authenticate
 
