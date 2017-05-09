@@ -390,8 +390,8 @@ class WAIT_FOR_TIMESLOT(State):
             service_id = timezone = self.__get_availabilities().get("serviceId")
             print 'start: '+start_time+' finish: '+finish_time
             self.send_messages([GIVE_FEW_SECONDS])
-            my_obe = obe.OBE()
-            is_time_held = my_obe.hold_timeslot(service_id, start_time, finish_time)
+            my_crm = crm.CRM()
+            is_time_held = my_crm.hold_timeslot(service_id, start_time, finish_time)
             if is_time_held:
                 # Save the timeslot info in Firebase
                 self.update_order({'start_time':start_time})
