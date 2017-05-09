@@ -12,7 +12,8 @@ class CRM(object):
 
     def execute_booking(self, booking_info):
         if not self.__authenticate():
-            return {'error':'OBE Authentication error'}
+            print 'OBE Authentication Error'
+            return False
 
         # Step 1: Junk customer
         url = self.instance_url + os.environ['OBE_RESOURCE_PATH_JUNK_CUSTOMER']
@@ -40,7 +41,8 @@ class CRM(object):
 
         res = requests.post(url, json = data, headers = headers)
         if res.status_code != requests.codes.ok:
-             return {'error': res.text}
+            print 'Error: ' + res.text
+             return False
         junk_customer = res.json()
         service_type_id = junk_customer.get('service_type_id')
         recordowner_id = junk_customer.get('recordowner_id')
@@ -76,9 +78,8 @@ class CRM(object):
         res2 = requests.post(url2, json = data2, headers = headers)
         if res2.status_code != requests.codes.ok:
             print 'Error: ' + res2.text
-            return {'error': res2.text}
-        print 'Booking Result: ' + json.dumps(res2.json, indent = 4)
-        return res2.json()
+            return False
+        return True
 
     def is_zip_verified(self, zipcode):
         # Authenticate
