@@ -527,7 +527,8 @@ class WAIT_FOR_ZIP(State):
             # Should ask sender to contact customer support
             print 'ZIPCODE cannot be verified: '+zipcode
             self.send_messages([UNVERFIABLE_ZIP])
-            self.set_next_state('INIT')
+            self.set_next_state('INVALID_ZIP')
+            self.archive()
         else:
             # missing zipcode
             self.send_messages([MISSING_ZIP, PROMPT_ZIP_MESSAGE])
