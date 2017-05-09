@@ -476,8 +476,8 @@ class WAIT_FOR_ZIP(State):
         # If zipcode extracted, send for verification
         # Else, propmpt for zipcode again.
         # ToDo: What about area not serviced?
-        my_obe = obe.OBE()
-        zip_verification = my_obe.is_zip_verified(zipcode.replace(' ',''))
+        my_crm = crm.CRM()
+        zip_verification = my_crm.is_zip_verified(zipcode.replace(' ',''))
         if zipcode and 'error' not in zip_verification.keys():
             # ZIPCODE VERIFIED
             franchise_id = zip_verification.get('franchise_id')
@@ -485,7 +485,7 @@ class WAIT_FOR_ZIP(State):
             self.update_order({'zip':zipcode.upper()})
             self.send_messages([ZIP_RECEIVED % (zipcode)])
             # 1. Get availability,
-            availabilities = my_obe.get_availabilities()
+            availabilities = my_crm.get_availabilities()
             qr = []
             if 'error' not in availabilities.keys():
                 counter = 0

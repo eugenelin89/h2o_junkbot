@@ -1,6 +1,6 @@
 import os, requests, json, datetime
 
-class OBE(object):
+class CRM(object):
     def __init__(self):
         # OBE related detail should be encapsulated in the OBE object
         self.access_token = None
