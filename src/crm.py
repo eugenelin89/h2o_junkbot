@@ -62,7 +62,7 @@ class CRM(object):
             'to_address' : to_address,
             'start_date_time' : booking_info.get('start_time'),
             'finish_date_time' : booking_info.get('finish_time'),
-            'service_id' : booking_info.get('availabilities').get('serviceId')
+            'service_id' : booking_info.get('availabilities').get('serviceId'),
             'customer_type' : 'Residential',
             'notes' : 'Booked by Junkbot',
             'service_type_id' : service_type_id,
