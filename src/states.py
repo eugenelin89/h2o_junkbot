@@ -39,6 +39,11 @@ class State(object):
         res = requests.get(url, params = {'sender_id':self.sender_id, 'key':key}).json()
         return res
 
+    def archive(self):
+        booking = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
+        url = os.environ['ARCHIVE_URL']
+        res = requests.post(url, json=booking, params = {'sender_id':self.sender_id})
+        requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
 
     @abstractmethod
     def responds_to_sender(self, sender_id, message, nlp_data, payload):
@@ -85,8 +90,10 @@ class RESET(State):
         super(RESET, self).__init__(sender_id)
         print 'RESET STATE instantiated'
         # DELETE order for sender_id
-        requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
-        self.set_next_state('INIT')
+        self.set_next_state('RESET')
+        self.archive()
+        #requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
+        #self.set_next_state('INIT')
 
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
         pass
@@ -112,18 +119,24 @@ class WAIT_FOR_CONFIRMATION(State):
             if is_booked:
                 self.send_messages([IS_CONFIRMED])
                 # Archive Order
+                self.set_next_state('BOOKED')
+                self.archive()
                 # Delete Order
-                requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
+                #requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
             else:
                 # Ask sener to call support
                 self.send_messages([BOOKING_FAILED])
                 # Archive Order
+                self.set_next_state('BOOKING_FAILED')
+                self.archive()
                 # DELETE order for sender_id
-                requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
+                #requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
 
         elif nlp_data.get('result').get('metadata').get('intentName') == CANCEL_INTENT:
             print 'Cancel Booking...'
-            requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
+            self.set_next_state('CANCELLED')
+            self.archive()
+            #requests.delete(os.environ['ORDER_URL'], params = {'sender_id':self.sender_id})
             self.send_messages([BYE])
         else:
             qr = [{'content_type':'text', 'title':BOOK_JOB, 'payload':'BOOK_JOB'},{'content_type':'text', 'title':CANCEL, 'payload':'CANCEL'}]
@@ -135,7 +148,7 @@ class WAIT_FOR_CONFIRMATION(State):
         booking_info = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
         my_crm = crm.CRM()
         return my_crm.execute_booking(booking_info)
-        
+
 
     # ToDo: Refactor state transition here
     def _next_state(self):
@@ -598,7 +611,9 @@ def get_state(sender_id):
     if timestamp:
         curstamp = time.time()
         if (curstamp - timestamp) > MAX_WAIT_SECONDS:
-            requests.delete(os.environ['ORDER_URL'], params = {'sender_id':sender_id})
+            self.set_next_state('EXPIRED')
+            self.archive()
+            #requests.delete(os.environ['ORDER_URL'], params = {'sender_id':sender_id})
 
     url = os.environ['GET_STATE_URL']
     cur_state = requests.get(url, {'sender_id':sender_id}).json()
