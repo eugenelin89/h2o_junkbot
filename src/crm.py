@@ -48,7 +48,7 @@ class CRM(object):
         globalnote_id = junk_customer.get('globalnote_id')
         contact_id = junk_customer.get('contact_id')
         account_id = junk_customer.get('account_id')
-        print 'junk_customer: ' + junk_customer
+        print 'junk_customer: ' + json.dumps(junk_customer, indent = 4)
 
         # Step 2: Junk Service
         pass
