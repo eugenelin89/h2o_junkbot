@@ -134,10 +134,8 @@ class WAIT_FOR_CONFIRMATION(State):
     def __book_appointment(self):
         booking_info = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
         my_crm = crm.CRM()
-        result = my_crm.execute_booking(booking_info)
-        if result.get('error'):
-            return False
-        return True
+        return my_crm.execute_booking(booking_info)
+        
 
     # ToDo: Refactor state transition here
     def _next_state(self):
