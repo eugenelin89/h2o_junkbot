@@ -32,8 +32,8 @@ class CRM(object):
             'phone' : booking_info.get('phone'),
             'email' : booking_info.get('email'),
             'to_address' : to_address,
-            'start_date_time' : '2017-05-10T17:00:00.000Z' #booking_info.get('start_time'),
-            'finish_date_time' : '2017-05-10T17:00:00.000Z' #booking_info.get('finish_time'),
+            'start_date_time' : '2017-05-10T17:00:00.000Z', #booking_info.get('start_time'),
+            'finish_date_time' : '2017-05-10T17:00:00.000Z', #booking_info.get('finish_time'),
             'pickup_description' : booking_info.get('detail'),
             'additional_information_required' : 0
         }
