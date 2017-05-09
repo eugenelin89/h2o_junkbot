@@ -37,6 +37,7 @@ class CRM(object):
             'pickup_description' : booking_info.get('detail'),
             'additional_information_required' : 0
         }
+
         res = requests.post(url, json = data, headers = headers)
         if res.status_code != requests.codes.ok:
              return {'error': res.text}
@@ -71,6 +72,7 @@ class CRM(object):
         }
         res2 = requests.post(url2, json = data2, headers = headers)
         if res2.status_code != requests.codes.ok:
+            print 'Error: ' + res2.text
             return {'error': res2.text}
         print 'Booking Result: ' + json.dumps(res2.json, indent = 4)
         return res2.json()
