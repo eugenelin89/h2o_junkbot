@@ -42,7 +42,7 @@ class CRM(object):
         if res.status_code != requests.codes.ok:
              return {'error': res.text}
         junk_customer = res.json()
-        service_type_id = junk_customer.get('junk_customer')
+        service_type_id = junk_customer.get('service_type_id')
         recordowner_id = junk_customer.get('recordowner_id')
         recordowner_account_id = junk_customer.get('recordowner_account_id')
         opportunity_id = junk_customer.get('opportunity_id')
