@@ -612,18 +612,17 @@ def get_state(sender_id):
     if timestamp:
         curstamp = time.time()
         if (curstamp - timestamp) > MAX_WAIT_SECONDS:
-            #self.set_next_state('EXPIRED')
-            #self.archive()
             # Update state to EXPIRED
-            url = os.environ['GET_STATE_URL']
-            payload = {'state':'EXPIRED'}
-            res = requests.post(url, json = payload, params = {'sender_id':sender_id})
+            #url = os.environ['GET_STATE_URL']
+            #payload = {'state':'EXPIRED'}
+            #res = requests.post(url, json = payload, params = {'sender_id':sender_id})
             # Archive the previous order
-            booking = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : sender_id}).json()
-            url = os.environ['ARCHIVE_URL']
-            res = requests.post(url, json=booking, params = {'sender_id': sender_id})
+            #booking = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : sender_id}).json()
+            #url = os.environ['ARCHIVE_URL']
+            #res = requests.post(url, json=booking, params = {'sender_id': sender_id})
             # Delete the previous order
-            requests.delete(os.environ['ORDER_URL'], params = {'sender_id': sender_id})
+            #requests.delete(os.environ['ORDER_URL'], params = {'sender_id': sender_id})
+            RESET(sender_id)
 
 
     url = os.environ['GET_STATE_URL']
