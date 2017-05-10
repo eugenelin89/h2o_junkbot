@@ -40,9 +40,7 @@ class State(object):
         return res
 
     def archive(self):
-        print 'ARCHIVING...'
         booking = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : self.sender_id}).json()
-        print 'Arching the following: '+json.dumps(booking, indent=4)
         url = os.environ['ARCHIVE_URL']
         res = requests.post(url, json=booking, params = {'sender_id':self.sender_id})
         print 'DELETING'
@@ -615,16 +613,6 @@ def get_state(sender_id):
     if timestamp:
         curstamp = time.time()
         if (curstamp - timestamp) > MAX_WAIT_SECONDS:
-            # Update state to EXPIRED
-            #url = os.environ['GET_STATE_URL']
-            #payload = {'state':'EXPIRED'}
-            #res = requests.post(url, json = payload, params = {'sender_id':sender_id})
-            # Archive the previous order
-            #booking = requests.get(os.environ['CONFIRM_URL'], {'sender_id' : sender_id}).json()
-            #url = os.environ['ARCHIVE_URL']
-            #res = requests.post(url, json=booking, params = {'sender_id': sender_id})
-            # Delete the previous order
-            #requests.delete(os.environ['ORDER_URL'], params = {'sender_id': sender_id})
             print 'RESETTING'
             RESET(sender_id)
 
