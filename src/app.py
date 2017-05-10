@@ -22,6 +22,10 @@ def test():
     tasks.add.delay(1,2)
     return "Good Test!"
 
+@app.route("/health_check", methods=['GET'])
+def health_check():
+    return 'OK'
+
 
 #########################
 # Inbound from Facebook #
