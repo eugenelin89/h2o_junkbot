@@ -24,7 +24,9 @@ def test():
 
 @app.route("/health_check", methods=['GET'])
 def health_check():
-    return 'OK'
+    url = os.environ['BASE_URL']
+    res = requests.get(url)
+    return res.json()
 
 
 #########################
