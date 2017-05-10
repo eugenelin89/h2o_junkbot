@@ -26,7 +26,7 @@ def test():
 def health_check():
     url = os.environ['BASE_URL']
     res = requests.get(url)
-    return json.dumps(res.json, indent = 4)
+    return json.dumps(res.json(), indent = 4)
 
 
 #########################
