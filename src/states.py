@@ -5,7 +5,7 @@ from messages import *
 from intents import *
 
 MAX_TIME_SELECTIONS = 5
-MAX_WAIT_SECONDS = 15 * 60
+MAX_WAIT_SECONDS = 1 * 60
 
 class State(object):
     __metaclass__ = ABCMeta
@@ -614,7 +614,8 @@ def get_state(sender_id):
         curstamp = time.time()
         if (curstamp - timestamp) > MAX_WAIT_SECONDS:
             print 'RESETTING'
-            RESET(sender_id)
+            state = RESET(sender_id)
+            state.send_messages([EXPIRED])
 
 
     url = os.environ['GET_STATE_URL']
