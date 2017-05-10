@@ -301,7 +301,7 @@ class WAIT_FOR_ADDRESS(State):
             'city':address[0].get('PlaceName'),
             'country':address[0].get('CountryName'),
             'state':address[0].get('StateName'),
-            'street':street.upper(),
+            'street':street,
             'zip':address[0].get('ZipCode')
         }
         return result
