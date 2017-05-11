@@ -2,7 +2,7 @@ import os, requests, json, datetime
 
 class CRM(object):
     def __init__(self):
-        # OBE related detail should be encapsulated in the OBE object
+        # CRM related detail should be encapsulated in the CRM object
         self.access_token = None
         self.instance_url = None
         self.franchise_id = None
@@ -12,11 +12,11 @@ class CRM(object):
 
     def execute_booking(self, booking_info):
         if not self.__authenticate():
-            print 'OBE Authentication Error'
+            print 'CRM Authentication Error'
             return False
 
         # Step 1: Junk customer
-        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_JUNK_CUSTOMER']
+        url = self.instance_url + os.environ['CRM_RESOURCE_PATH_JUNK_CUSTOMER']
         address = booking_info.get('address')
         to_address = '%s;%s;%s;%s;%s' % ( address.get('city'), address.get('country'), \
                                            address.get('state'), address.get('street'), \
@@ -26,7 +26,7 @@ class CRM(object):
             'Content-Type':'application/json'
         }
         data = {
-            'brand' : os.environ['OBE_BRAND'],
+            'brand' : os.environ['CRM_BRAND'],
             'franchise_id' : booking_info.get('franchise_id'),
             'first_name' : booking_info.get('first_name'),
             'last_name' : booking_info.get('last_name'),
@@ -54,9 +54,9 @@ class CRM(object):
         print 'junk_customer: ' + json.dumps(junk_customer, indent = 4)
 
         # Step 2: Junk Service
-        url2 = self.instance_url + os.environ['OBE_RESOURCE_PATH_JUNK_SERVICE']
+        url2 = self.instance_url + os.environ['CRM_RESOURCE_PATH_JUNK_SERVICE']
         data2 = {
-            'brand' : os.environ['OBE_BRAND'],
+            'brand' : os.environ['CRM_BRAND'],
             'franchise_id' : booking_info.get('franchise_id'),
             'first_name' : booking_info.get('first_name'),
             'phone' : booking_info.get('phone'),
@@ -88,15 +88,15 @@ class CRM(object):
             return {'error':'zipcode is None'}
 
         if not self.__authenticate():
-            return {'error':'OBE Authentication error'}
+            return {'error':'CRM Authentication error'}
 
-        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_VERIFY_AREA']
+        url = self.instance_url + os.environ['CRM_RESOURCE_PATH_VERIFY_AREA']
         headers = {
             "Authorization":'Bearer '+self.access_token
         }
         params = {
             'from_postal_code':zipcode,
-            'brand':os.environ['OBE_BRAND']
+            'brand':os.environ['CRM_BRAND']
         }
 
         res = requests.get(url, params = params, headers = headers)
@@ -111,8 +111,8 @@ class CRM(object):
     def get_availabilities(self):
         print 'get_availability()'
         if not self.__authenticate():
-            return {'error':'OBE Authentication error'}
-        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_AVAILABILITY']
+            return {'error':'CRM Authentication error'}
+        url = self.instance_url + os.environ['CRM_RESOURCE_PATH_AVAILABILITY']
         start_date = datetime.date.today().isoformat()
         end_date = (datetime.date.today() + datetime.timedelta(days=2)).isoformat()
         data = {
@@ -120,7 +120,7 @@ class CRM(object):
             'start_date' : start_date,
             'end_date' : end_date,
             'postal_code' : self.zipcode,
-            'brand' : os.environ['OBE_BRAND']
+            'brand' : os.environ['CRM_BRAND']
         }
         headers = {
             'Authorization':'Bearer '+self.access_token,
@@ -138,8 +138,8 @@ class CRM(object):
     def hold_timeslot(self, service_id, start_time, finish_time):
         print 'hold_timeslot(%s, %s %s)'%(service_id, start_time, finish_time)
         if not self.__authenticate():
-            return {'error':'OBE Authentication error'}
-        url = self.instance_url + os.environ['OBE_RESOURCE_PATH_HOLD_SLOT']
+            return {'error':'CRM Authentication error'}
+        url = self.instance_url + os.environ['CRM_RESOURCE_PATH_HOLD_SLOT']
         headers = {
             "Authorization":'Bearer '+self.access_token
         }
@@ -159,15 +159,15 @@ class CRM(object):
 
 
     def __authenticate(self):
-        print 'authenticate with OBE'
+        print 'authenticate with CRM'
         if not self.authenticated:
-            url = os.environ['OBE_AUTH_URL']
+            url = os.environ['CRM_AUTH_URL']
             data = {
                 'grant_type':'password',
-                'client_id': os.environ['OBE_CLIENT_ID'],
-                'client_secret': os.environ['OBE_CLIENT_SECRET'],
-                'username': os.environ['OBE_USERNAME'],
-                'password': os.environ['OBE_PASSWORD']
+                'client_id': os.environ['CRM_CLIENT_ID'],
+                'client_secret': os.environ['CRM_CLIENT_SECRET'],
+                'username': os.environ['CRM_USERNAME'],
+                'password': os.environ['CRM_PASSWORD']
             }
             res_json = requests.post(url, data=data).json()
             print 'authenticate result: ' + json.dumps(res_json, indent = 4)
