@@ -522,7 +522,7 @@ class WAIT_FOR_ZIP(State):
                 self.send_messages([SELECT_TIMESLOT], quick_reply=qr)
                 self.set_next_state('WAIT_FOR_TIMESLOT')
             else:
-                self.send_messages(['UNAVAILABLE'])
+                self.send_messages([UNAVAILABLE])
                 self.archive()
             # 2. Send users availabilities for selection,
             # 3. Move to the next state WAIT_FOR_SELECTION
