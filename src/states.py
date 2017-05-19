@@ -613,6 +613,8 @@ def get_state(sender_id, sender_message, nlp_data):
     # Check to see if it is a CANCEL intent
     if nlp_data.get('result').get('metadata').get('intentName') == CANCEL_INTENT:
         print 'Cancel Booking...'
+        state = RESET(sender_id)
+        state.send_messages([BYE])
 
     # get timestamp from order. if +15 min ago, start over
     timestamp = requests.get(os.environ['ORDER_URL'], params = {'sender_id':sender_id, 'key':'timestamp'}).json()
