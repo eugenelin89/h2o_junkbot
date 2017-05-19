@@ -611,9 +611,9 @@ def get_state(sender_id, sender_message, nlp_data):
     # ToDo: If timestamp is over x minutes ago, regardless state,
     # re-start from INIT
     # Check to see if it is a CANCEL intent
-    if nlp_data.get('result').get('metadata').get('intentName') == CANCEl_INTENT:
-        state = RESET(sender_id)
-        state.send_message([BYE])
+    #if nlp_data.get('result').get('metadata').get('intentName') == CANCEl_INTENT:
+    #    state = RESET(sender_id)
+    #    state.send_message([BYE])
 
     # get timestamp from order. if +15 min ago, start over
     timestamp = requests.get(os.environ['ORDER_URL'], params = {'sender_id':sender_id, 'key':'timestamp'}).json()
