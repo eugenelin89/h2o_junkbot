@@ -615,6 +615,7 @@ def get_state(sender_id, sender_message, nlp_data):
         print 'Cancel Booking...'
         state = RESET(sender_id)
         state.send_messages([BYE])
+        return state
 
     # get timestamp from order. if +15 min ago, start over
     timestamp = requests.get(os.environ['ORDER_URL'], params = {'sender_id':sender_id, 'key':'timestamp'}).json()
