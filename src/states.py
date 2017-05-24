@@ -73,7 +73,7 @@ class INIT(State):
         # 3. Prompt for ZIP
         self.send_messages([PROMPT_ZIP_MESSAGE])
         # 4. Get first_name and last_name
-        profile = fb.get_fb_profile(self.sender_id)
+        profile = fb.get_profile(self.sender_id)
         print json.dumps(profile, indent=4)
         self.update_order({'first_name':profile.get('first_name')})
         self.update_order({'last_name':profile.get('last_name')})
