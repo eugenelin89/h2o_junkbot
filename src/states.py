@@ -88,7 +88,7 @@ class INIT(State):
         pass
 ################################################################################
 class RESET(State):
-    def __init__(self, sender_id):
+    def __init__(self, chat_platform, sender_id):
         super(RESET, self).__init__(sender_id)
         print 'RESET STATE instantiated'
         # DELETE order for sender_id
