@@ -345,8 +345,8 @@ class WAIT_FOR_DETAIL(State):
 
 ################################################################################
 class WAIT_FOR_TIMESLOT(State):
-    def __init__(self, sender_id):
-        super(WAIT_FOR_TIMESLOT, self).__init__(sender_id)
+    def __init__(self, chat_platform, sender_id):
+        super(WAIT_FOR_TIMESLOT, self).__init__(chat_platform, sender_id)
         self.availabilities = None
 
     def responds_to_sender(self, sender_message, nlp_data, payload = None):
