@@ -17,7 +17,7 @@ class State(object):
     def send_messages(self, response_messages, quick_reply = None, buttons = None):
         ''' takes a list of messages and will send in order '''
         for message in response_messages:
-            chat_platform.send_message(self.sender_id, message, quick_reply = quick_reply, buttons = buttons)
+            self.chat_platform.send_message(self.sender_id, message, quick_reply = quick_reply, buttons = buttons)
         return
 
     def set_next_state(self, next_state):
