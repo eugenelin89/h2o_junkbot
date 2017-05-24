@@ -1,6 +1,6 @@
 from __future__ import print_function
 from flask import Flask, request, make_response, abort, logging
-import urllib, json, os, sys, requests, tasks
+import urllib, json, os, sys, requests, tasks, fb
 # _access_token and _post_msg_url will eventually be moved to another module/process for sending messages.
 
 #########
@@ -45,7 +45,8 @@ def handshake(bot_id):
 def process_message(bot_id):
     # received message from user
     data = request.json # type dict, whereas request.data is type str
-    tasks.fb_process.delay(data)
+    chat_platform = fb.FB()
+    tasks.process.delay(chat_platform, data)
     return "ok"
 
 #######################

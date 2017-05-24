@@ -10,13 +10,14 @@ MAX_WAIT_SECONDS = 15 * 60
 class State(object):
     __metaclass__ = ABCMeta
 
-    def __init__(self, sender_id):
+    def __init__(self, chat_platform, sender_id):
         self.sender_id = sender_id
+        self.chat_platform = chat_platform
 
     def send_messages(self, response_messages, quick_reply = None, buttons = None):
         ''' takes a list of messages and will send in order '''
         for message in response_messages:
-            fb.send_message(self.sender_id, message, quick_reply = quick_reply, buttons = buttons)
+            chat_platform.send_message(self.sender_id, message, quick_reply = quick_reply, buttons = buttons)
         return
 
     def set_next_state(self, next_state):
@@ -607,13 +608,13 @@ class DETAIL_SUBMITTED(State):
 # Get Instance of a STATE object
 #################################
 ################################################################################
-def get_state(sender_id, sender_message, nlp_data):
+def get_state(chat_platform, sender_id, sender_message, nlp_data):
     # ToDo: If timestamp is over x minutes ago, regardless state,
     # re-start from INIT
     # Check to see if it is a CANCEL intent
     if nlp_data.get('result').get('metadata').get('intentName') == CANCEL_INTENT:
         print 'Cancel Booking...'
-        state = RESET(sender_id)
+        state = RESET(chat_platform, sender_id)
         state.send_messages([BYE])
         return state
 
@@ -623,7 +624,7 @@ def get_state(sender_id, sender_message, nlp_data):
         curstamp = time.time()
         if (curstamp - timestamp) > MAX_WAIT_SECONDS:
             print 'RESETTING'
-            state = RESET(sender_id)
+            state = RESET(chat_platform, sender_id)
             state.send_messages([EXPIRED])
 
 
@@ -632,8 +633,8 @@ def get_state(sender_id, sender_message, nlp_data):
     state = None
 
     if cur_state == None or cur_state not in globals(): # user has not yet started
-        state = INIT(sender_id)
+        state = INIT(chat_platform, sender_id)
     else:
         state_class = globals()[cur_state]
-        state = state_class(sender_id)
+        state = state_class(chat_platform, sender_id)
     return state

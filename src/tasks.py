@@ -17,26 +17,27 @@ app.conf.update(
 
 
 @app.task
-def fb_process(fb_data):
-    print 'fb_process( %s )' % (json.dumps(fb_data, indent=4))
-    if 'message' in fb_data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
-        fb_sender_id = fb_data['entry'][0]['messaging'][0]['sender']['id']
+def process(chat_platform, chat_data):
+    print 'process( %s )' % (json.dumps(chat_data, indent=4))
+    # Need to refactor below so that messages are extracted by chat_platform
+    if 'message' in chat_data['entry'][0]['messaging'][0]: # The 'messaging' array may contain multiple messages.  Need fix.
+        sender_id = chat_data['entry'][0]['messaging'][0]['sender']['id']
         #fb_sender_message = fb_data['entry'][0]['messaging'][0]['message']['text']
-        fb_message_obj = fb_data['entry'][0]['messaging'][0]['message']
-        fb_sender_message = fb_message_obj.get('text')
-        payload = fb_message_obj.get('quick_reply')
+        message_obj = chat_data['entry'][0]['messaging'][0]['message']
+        sender_message = message_obj.get('text')
+        payload = message_obj.get('quick_reply')
 
 
         #fb_timestamp = fb_data['entry'][0]['time']
 
-        apiai_data = apiai.query(fb_sender_id, fb_sender_message)
+        apiai_data = apiai.query(sender_id, sender_message)
         # apiai_action = apiai_data.get('result').get('action')
         # apiai_intent = apiai_data.get('result').get('metadata').get('intentName')
         # apiai_parameters = apiai_data.get('result').get('parameters')
         # apiai_fulfillment_msg = apiai_data.get("result").get("fulfillment").get("speech")
         print 'API.AI Query Result: %s' % (json.dumps(apiai_data, indent = 4))
-        state = states.get_state(fb_sender_id, fb_sender_message, apiai_data)
-        state.responds_to_sender(fb_sender_message, apiai_data, payload = payload)
+        state = states.get_state(chat_platform, sender_id, sender_message, apiai_data)
+        state.responds_to_sender(sender_message, apiai_data, payload = payload)
     return
 
 @app.task
